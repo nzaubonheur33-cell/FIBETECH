@@ -2,7 +2,6 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { CtaBand } from '@/components/layout/CtaBand'
 import { BrowserFrame, PhoneFrame } from '@/components/illustrations/mocks'
-import { AnchorLink } from '@/components/ui/anchor-link'
 import { ButtonLink } from '@/components/ui/button'
 import { Check, PathIcon } from '@/components/ui/icons'
 import { Marquee } from '@/components/ui/marquee'
@@ -92,37 +91,6 @@ function WebVisual() {
       </PhoneFrame>
       <span className="chip absolute bottom-[14%] left-[6%] border-[1.5px] border-ink bg-white text-ink">Rapide en 3G</span>
       <span className="chip absolute right-[30%] top-[6%] border-[1.5px] border-ink bg-mustard text-ink">Paiement mobile</span>
-    </div>
-  )
-}
-
-function ItVisual() {
-  const tickets = [
-    { title: 'Imprimante de l’accueil bloquée', sub: 'Intervention à distance', status: 'Résolu', cls: 'bg-mal-soft text-[#0B4A39]', strong: true },
-    { title: 'Nouveau poste pour la comptabilité', sub: 'Installation sur site', status: 'En cours', cls: 'bg-copper-soft text-copper-deep' },
-    { title: 'Mise à jour antivirus', sub: 'Tous les postes', status: 'Planifié', cls: 'bg-[#EEF0EF] text-ink-soft' },
-  ]
-  return (
-    <div className="flex flex-col gap-3.5 rounded-[28px] border-[1.5px] border-ink bg-white p-7">
-      <div className="flex items-center justify-between gap-3">
-        <strong className="font-display text-[22px]">Demandes d’assistance</strong>
-        <span className="chip bg-ink font-mono font-medium text-white">Aujourd’hui</span>
-      </div>
-      {tickets.map((ticket) => (
-        <div key={ticket.title} className={cn('flex items-center justify-between gap-3 rounded-2xl px-[18px] py-4', ticket.strong ? 'float border-[1.5px] border-ink' : 'border-[1.5px] border-line')}>
-          <div className="flex flex-col">
-            <strong>{ticket.title}</strong>
-            <span className="text-sm text-ink-muted">{ticket.sub}</span>
-          </div>
-          <span className={cn('chip', ticket.cls)}>{ticket.status}</span>
-        </div>
-      ))}
-      <div className="flex items-center gap-3 pt-1.5">
-        <span className="grid h-11 w-11 place-items-center rounded-full bg-copper-soft text-copper">
-          <PathIcon name="headset" size={22} strokeWidth={1.8} />
-        </span>
-        <span className="text-[15px] text-ink-soft">Un technicien dédié suit votre dossier</span>
-      </div>
     </div>
   )
 }
@@ -224,34 +192,6 @@ function NetworkVisual() {
   )
 }
 
-function ConseilVisual() {
-  const columns = [
-    { label: 'Maintenant', chips: [{ t: 'Sauvegardes', c: 'bg-ink text-white' }, { t: 'Audit du parc', c: 'bg-ink text-white' }] },
-    { label: '3 mois', chips: [{ t: 'Site web', c: 'float bg-copper text-white' }, { t: 'Facturation', c: 'bg-copper-soft text-copper-deep' }] },
-    { label: '6 mois', chips: [{ t: 'Assistant IA', c: 'bg-mal-soft text-[#0B4A39]' }, { t: 'Formation', c: 'bg-mal-soft text-[#0B4A39]' }] },
-  ]
-  return (
-    <div className="flex flex-col gap-4 rounded-[28px] border-[1.5px] border-ink bg-white p-7">
-      <strong className="font-display text-[22px]">Votre feuille de route</strong>
-      <div className="grid grid-cols-3 gap-3">
-        {columns.map((col) => (
-          <div key={col.label} className="flex flex-col gap-2">
-            <span className="eyebrow text-[11px] text-copper">{col.label}</span>
-            {col.chips.map((chip) => (
-              <span key={chip.t} className={cn('chip justify-center whitespace-normal text-center', chip.c)}>
-                {chip.t}
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div className="h-2.5 overflow-hidden rounded-full bg-stone">
-        <span className="block h-full w-[38%] rounded-full bg-mal" />
-      </div>
-    </div>
-  )
-}
-
 export default function Services() {
   usePageMeta('Services', 'Développement web et mobile, assistance IT, transformation numérique, IA, réseaux et conseil digital à Lubumbashi.')
 
@@ -264,13 +204,13 @@ export default function Services() {
             Tout ce qu’il faut pour faire tourner votre entreprise <span className="text-copper">en numérique.</span>
           </h1>
           <p className="rise d2 max-w-[640px] text-xl text-ink-soft">
-            Six domaines complémentaires. Vous pouvez nous confier un seul chantier ou tout l’écosystème : on s’adapte à votre taille et à votre budget.
+            Quatre expertises complémentaires : le web et mobile, les réseaux, l’IA et les formations numériques.
           </p>
           <nav aria-label="Aller au service" className="rise d3 flex flex-wrap gap-2.5 pt-2">
             {services.map((service) => (
-              <AnchorLink key={service.id} target={service.id} className="anchor">
+              <Link key={service.id} to={service.href} className="anchor">
                 {service.short}
-              </AnchorLink>
+              </Link>
             ))}
           </nav>
         </div>
@@ -286,27 +226,7 @@ export default function Services() {
         secondary={{ label: 'Demander un devis', to: routes.contact }}
         visual={<WebVisual />}
       />
-      <ServiceRow
-        id="it"
-        tone="stone"
-        reverse
-        eyebrow="Solutions IT et assistance"
-        title="Un service informatique, sans avoir à le recruter."
-        text="Ordinateurs lents, imprimante bloquée, messagerie en panne : on intervient à distance ou sur place, et on prévient les pannes avant qu’elles arrivent."
-        idealFor="bureaux, cabinets, agences et écoles de 3 à 100 postes."
-        cta={{ label: 'Voir les abonnements', to: routes.pricing }}
-        secondary={{ label: 'Signaler un besoin', to: routes.contact }}
-        visual={<ItVisual />}
-      />
-      <ServiceRow
-        id="transfo"
-        eyebrow="Transformation numérique"
-        title="Du cahier au tableau de bord, sans perdre personne en route."
-        text="On observe comment vous travaillez aujourd’hui, puis on numérise étape par étape : factures, stock, rendez-vous, rapports. Vos équipes sont formées à chaque changement."
-        idealFor="les organisations qui grandissent plus vite que leurs outils."
-        cta={{ label: 'Parler de votre organisation', to: routes.contact }}
-        visual={<TransfoVisual />}
-      />
+      <ServiceRow id="formation" tone="stone" eyebrow="Formations numériques" title="Des compétences numériques utiles au quotidien." text="Nous accompagnons vos équipes avec des formations pratiques en bureautique, outils numériques, création web et intelligence artificielle." idealFor="entreprises, associations, écoles et équipes en développement." cta={{ label: 'Découvrir les formations', to: routes.training }} visual={<TransfoVisual />} />
       <ServiceRow
         id="ia"
         tone="dark"
@@ -314,7 +234,7 @@ export default function Services() {
         eyebrow="IA et automatisation"
         title="L’IA qui répond à vos clients pendant que vous dormez."
         text="Un assistant sur WhatsApp ou sur votre site répond aux questions fréquentes, prend les commandes et vous transmet les cas importants. Le reste de l’automatisation suit la même logique : moins de saisie, plus de temps utile."
-        cta={{ label: 'Imaginer votre assistant', to: routes.contact }}
+        cta={{ label: 'Voir le détail', to: routes.ia }}
         visual={<IaVisual />}
       />
       <ServiceRow
@@ -323,18 +243,8 @@ export default function Services() {
         title="Un réseau stable, même quand le courant ne l’est pas."
         text="Câblage propre, Wi-Fi qui couvre tout le bâtiment, serveurs protégés par onduleur et sauvegardes automatiques. On documente tout, pour que vous ne dépendiez de personne."
         idealFor="bureaux, entrepôts, hôtels, campus et sites miniers."
-        cta={{ label: 'Demander un audit réseau', to: routes.contact }}
+        cta={{ label: 'Voir le détail', to: routes.reseau }}
         visual={<NetworkVisual />}
-      />
-      <ServiceRow
-        id="conseil"
-        tone="stone"
-        reverse
-        eyebrow="Conseil digital"
-        title="Décider avant de dépenser."
-        text="On fait le point sur vos outils, vos risques et vos priorités, puis on vous remet une feuille de route claire. Vous choisissez ensuite ce que vous faites avec nous, seul ou avec un autre prestataire."
-        cta={{ label: 'Réserver un diagnostic', to: routes.contact }}
-        visual={<ConseilVisual />}
       />
 
       <Marquee

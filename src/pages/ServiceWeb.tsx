@@ -4,7 +4,6 @@ import { BrowserFrame, MobileMoneyPill, PhoneFrame, wax } from '@/components/ill
 import { Accordion } from '@/components/ui/accordion'
 import { ButtonLink } from '@/components/ui/button'
 import { Check, PathIcon, type IconName } from '@/components/ui/icons'
-import { Ph } from '@/components/ui/placeholder'
 import { webFaq } from '@/data/faq'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { routes } from '@/lib/routes'
@@ -21,10 +20,10 @@ const deliverables: { title: string; text: string; icon: IconName }[] = [
 ]
 
 const projectTypes = [
-  { title: 'Site vitrine', text: 'Présenter votre activité, rassurer et recevoir des demandes.' },
-  { title: 'Boutique en ligne', text: 'Catalogue, panier, paiement mobile et suivi des commandes.' },
-  { title: 'Application mobile', text: 'Android et iOS, avec mode hors ligne pour le terrain.' },
-  { title: 'Plateforme sur mesure', text: 'Gestion interne, portail client, inscriptions, réservations.' },
+  { title: 'Site vitrine', text: 'Présenter votre activité, rassurer et recevoir des demandes.', price: 'À partir de 500 $', duration: '2 semaines' },
+  { title: 'Boutique en ligne', text: 'Catalogue, panier, paiement mobile et suivi des commandes.', price: 'À partir de 1 500 $', duration: '3 à 4 mois' },
+  { title: 'Application mobile', text: 'Android et iOS, avec mode hors ligne pour le terrain.', price: 'Sur devis', duration: 'Sur devis' },
+  { title: 'Plateforme sur mesure', text: 'Gestion interne, portail client, inscriptions, réservations.', price: 'Sur devis', duration: 'Sur devis' },
 ]
 
 const phases = [
@@ -136,13 +135,13 @@ export default function ServiceWeb() {
                   <div className="flex justify-between gap-2.5">
                     <dt className="text-ink-muted">Délai indicatif</dt>
                     <dd className="m-0">
-                      <Ph>[X] sem.</Ph>
+                      {type.duration}
                     </dd>
                   </div>
                   <div className="flex justify-between gap-2.5">
                     <dt className="text-ink-muted">Budget</dt>
                     <dd className="m-0">
-                      dès <Ph>[PRIX] $</Ph>
+                      {type.price}
                     </dd>
                   </div>
                 </dl>

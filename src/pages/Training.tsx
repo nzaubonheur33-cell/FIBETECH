@@ -1,25 +1,18 @@
-import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Accordion } from '@/components/ui/accordion'
 import { AnchorLink } from '@/components/ui/anchor-link'
 import { Button, ButtonLink } from '@/components/ui/button'
 import { Field, isPhone } from '@/components/ui/field'
 import { ArrowRight, Check, HorizonDot, PathIcon } from '@/components/ui/icons'
-import { Ph } from '@/components/ui/placeholder'
 import {
   customExamples,
   domainTone,
   formats,
-  levelRank,
-  sessions,
-  trainingDomains,
   trainingFaq,
-  trainingLevels,
   trainings,
   trainingSteps,
   type Training as TrainingItem,
-  type TrainingDomain,
   type TrainingFormat,
-  type TrainingLevel,
 } from '@/data/trainings'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { routes } from '@/lib/routes'
@@ -27,14 +20,14 @@ import { site } from '@/lib/site'
 import { cn, scrollToId } from '@/lib/utils'
 
 const ADVICE = 'conseil'
-const allFormats: TrainingFormat[] = ['Session ouverte', 'En entreprise', 'En ligne']
+const allFormats: TrainingFormat[] = ['Présentielle', 'En ligne']
 const bySlug = (slug: string) => trainings.find((t) => t.slug === slug)
 
 export default function Training() {
-  usePageMeta('Formations', 'Formations informatiques à Lubumbashi : bureautique, développement web, réseaux, cybersécurité et IA, en session ouverte, en entreprise ou en ligne.')
+  usePageMeta('Formations', 'Formations en développement web et mobile, bureautique, IA générative et réseaux, en présentiel ou en ligne, sur devis.')
 
   const [course, setCourse] = useState('')
-  const [format, setFormat] = useState<TrainingFormat>('Session ouverte')
+  const [format, setFormat] = useState<TrainingFormat>('Présentielle')
 
   const enroll = (slug: string, preferred?: TrainingFormat) => {
     const picked = bySlug(slug)
@@ -48,7 +41,6 @@ export default function Training() {
       <Hero />
       <Catalogue onEnroll={enroll} />
       <Formats />
-      <Sessions onEnroll={enroll} />
       <Steps />
       <ForTeams />
       <section aria-labelledby="tfaq-title" className="py-[110px]">
@@ -82,7 +74,7 @@ function Hero() {
             Apprenez le numérique avec ceux <span className="text-copper">qui le pratiquent.</span>
           </h1>
           <p className="rise d2 max-w-[560px] text-xl text-ink-soft">
-            Bureautique, développement web, réseaux, cybersécurité et IA{' '}: des formations pratiques à Lubumbashi, pour les équipes, les étudiants et tous ceux qui veulent progresser.
+            Développement web et mobile, bureautique, IA générative et réseaux : cinq formations pratiques en présentiel ou en ligne.
           </p>
           <div className="rise d3 flex flex-wrap gap-3">
             <AnchorLink target="catalogue" className="btn btn-cu">
@@ -131,7 +123,6 @@ function CourseVisual() {
         <div className="-rotate-2 rounded-[22px] border-[1.5px] border-ink bg-white p-7 shadow-[10px_10px_0_#121614] max-[520px]:p-5">
           <div className="flex items-center justify-between gap-3">
             <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted">Session · {site.city}</span>
-            <LevelMeter level="Intermédiaire" />
           </div>
           <p className="mt-3 font-display text-[28px] font-extrabold leading-[1.1] tracking-[-0.02em] max-[520px]:text-[24px]">Excel pour la gestion</p>
           <ul className="mt-5 flex flex-col gap-3">
@@ -187,28 +178,10 @@ function CourseVisual() {
   )
 }
 
-function LevelMeter({ level, className }: { level: TrainingLevel; className?: string }) {
-  const rank = levelRank[level]
-  return (
-    <span className={cn('inline-flex items-center gap-2 text-sm font-medium', className)}>
-      <span aria-hidden="true" className="flex items-end gap-[3px]">
-        {[1, 2, 3].map((i) => (
-          <span key={i} className={cn('w-[5px] rounded-sm', i === 1 ? 'h-2' : i === 2 ? 'h-3' : 'h-4', i <= rank ? 'bg-ink' : 'bg-line')} />
-        ))}
-      </span>
-      {level}
-    </span>
-  )
-}
-
 /* -------------------------------------------------------------------------- */
 
 function Catalogue({ onEnroll }: { onEnroll: (slug: string) => void }) {
-  const [domain, setDomain] = useState<'Tous' | TrainingDomain>('Tous')
-  const [level, setLevel] = useState<'Tous niveaux' | TrainingLevel>('Tous niveaux')
-
-  const visible = useMemo(() => trainings.filter((t) => (domain === 'Tous' || t.domain === domain) && (level === 'Tous niveaux' || t.level === level)), [domain, level])
-  const countFor = (d: 'Tous' | TrainingDomain) => trainings.filter((t) => d === 'Tous' || t.domain === d).length
+  const visible = trainings
 
   return (
     <section id="catalogue" aria-labelledby="catalogue-title" className="py-[110px]">
@@ -220,25 +193,7 @@ function Catalogue({ onEnroll }: { onEnroll: (slug: string) => void }) {
               Choisissez votre formation.
             </h2>
           </div>
-          <span className="chip bg-copper-soft text-copper-deep">Catalogue donné en exemple</span>
-        </div>
 
-        <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
-          <div className="flex flex-wrap gap-2.5" role="group" aria-label="Filtrer par domaine">
-            {trainingDomains.map((d) => (
-              <button key={d} type="button" className="chipbtn" aria-pressed={domain === d} onClick={() => setDomain(d)}>
-                {d} <span className="font-mono text-xs opacity-70">{countFor(d)}</span>
-              </button>
-            ))}
-          </div>
-          <div className="flex flex-wrap items-center gap-2.5" role="group" aria-label="Filtrer par niveau">
-            <span className="font-mono text-xs uppercase tracking-[0.12em] text-ink-muted">Niveau</span>
-            {trainingLevels.map((l) => (
-              <button key={l} type="button" className="chipbtn" aria-pressed={level === l} onClick={() => setLevel(l)}>
-                {l}
-              </button>
-            ))}
-          </div>
         </div>
 
         <p role="status" className="-mb-3 font-mono text-[13px] text-ink-muted">
@@ -256,10 +211,7 @@ function Catalogue({ onEnroll }: { onEnroll: (slug: string) => void }) {
         ) : (
           <div className="flex flex-col items-start gap-3 rounded-[22px] border-[1.5px] border-dashed border-ink p-10">
             <p className="font-display text-[26px] font-bold">Aucune formation pour ce choix.</p>
-            <p className="text-ink-soft">Essayez un autre niveau, ou demandez-nous une formation sur mesure.</p>
-            <Button variant="ghost" onClick={() => setLevel('Tous niveaux')}>
-              Voir tous les niveaux
-            </Button>
+            <p className="text-ink-soft">Choisissez une autre formation ou contactez-nous pour préciser votre besoin.</p>
           </div>
         )}
       </div>
@@ -274,7 +226,7 @@ function TrainingCard({ training: t, onEnroll }: { training: TrainingItem; onEnr
         <span className={cn('grid h-14 w-14 place-items-center rounded-2xl border-[1.5px] border-ink', domainTone[t.domain])}>
           <PathIcon name={t.icon} size={28} strokeWidth={1.7} />
         </span>
-        <LevelMeter level={t.level} />
+
       </div>
       <div className="flex flex-col gap-2.5 px-7 pt-5">
         <span className="font-mono text-xs uppercase tracking-[0.12em] text-copper">{t.domain}</span>
@@ -301,13 +253,13 @@ function TrainingCard({ training: t, onEnroll }: { training: TrainingItem; onEnr
           <div className="flex flex-col gap-1">
             <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">Durée</dt>
             <dd className="m-0 font-semibold">
-              <Ph>{t.duration}</Ph>
+              {t.duration}
             </dd>
           </div>
           <div className="flex flex-col gap-1">
             <dt className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-muted">Tarif</dt>
             <dd className="m-0 font-semibold">
-              <Ph>{t.price}</Ph> <span className="text-sm font-normal text-ink-muted">/ pers.</span>
+              {t.price}
             </dd>
           </div>
         </dl>
@@ -318,8 +270,8 @@ function TrainingCard({ training: t, onEnroll }: { training: TrainingItem; onEnr
             </li>
           ))}
         </ul>
-        <Button arrow className="w-full justify-center" aria-label={`S’inscrire à la formation ${t.title}`} onClick={() => onEnroll(t.slug)}>
-          S’inscrire
+        <Button arrow className="w-full justify-center" aria-label={`Demander un devis pour la formation ${t.title}`} onClick={() => onEnroll(t.slug)}>
+          Demander un devis
         </Button>
       </div>
     </article>
@@ -335,7 +287,7 @@ function Formats() {
         <div className="flex max-w-[720px] flex-col gap-[18px]">
           <span className="eyebrow text-copper">Formats</span>
           <h2 id="formats-title" className="text-[clamp(36px,4.4vw,58px)] font-extrabold">
-            Trois façons de se former.
+            Deux façons de se former.
           </h2>
         </div>
         <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6">
@@ -348,60 +300,12 @@ function Formats() {
                 {f.points.map((point) => (
                   <li key={point} className="flex gap-2.5 text-[15px]">
                     <Check size={18} className="mt-[3px] shrink-0 text-mal" />
-                    <span>{point.includes('[') ? <Ph>{point}</Ph> : point}</span>
+                    <span>{point}</span>
                   </li>
                 ))}
               </ul>
             </li>
           ))}
-        </ul>
-      </div>
-    </section>
-  )
-}
-
-function Sessions({ onEnroll }: { onEnroll: (slug: string, format?: TrainingFormat) => void }) {
-  return (
-    <section id="sessions" aria-labelledby="sessions-title" className="py-[110px]">
-      <div className="wrap flex flex-col gap-8">
-        <div className="flex flex-wrap items-end justify-between gap-[18px]">
-          <div className="flex flex-col gap-[18px]">
-            <span className="eyebrow text-copper">Calendrier</span>
-            <h2 id="sessions-title" className="text-[clamp(36px,4.4vw,58px)] font-extrabold">
-              Prochaines sessions.
-            </h2>
-          </div>
-          <span className="chip bg-copper-soft text-copper-deep">Calendrier donné en exemple</span>
-        </div>
-        <ul className="border-b-[1.5px] border-ink">
-          {sessions.map((s, i) => {
-            const t = bySlug(s.slug)
-            if (!t) return null
-            return (
-              <li key={`${s.slug}-${i}`} className="flex flex-wrap items-center gap-x-8 gap-y-4 border-t-[1.5px] border-ink py-6">
-                <div className="flex h-[84px] w-[84px] shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border-[1.5px] border-ink bg-white text-center">
-                  <span className="font-display text-[22px] font-extrabold leading-none">
-                    <Ph>{s.day}</Ph>
-                  </span>
-                  <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink-muted">
-                    <Ph>{s.month}</Ph>
-                  </span>
-                </div>
-                <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-1">
-                  <span className="font-display text-[clamp(22px,2.4vw,30px)] font-bold leading-[1.15]">{t.title}</span>
-                  <span className="text-ink-soft">
-                    {s.format} · {s.place} · <Ph>{t.duration}</Ph>
-                  </span>
-                </div>
-                <span className="chip bg-stone text-[#2F3833]">
-                  <Ph>{s.seats}</Ph>
-                </span>
-                <Button variant="ghost" aria-label={`Réserver une place : ${t.title}`} onClick={() => onEnroll(t.slug, s.format)}>
-                  Réserver ma place
-                </Button>
-              </li>
-            )
-          })}
         </ul>
       </div>
     </section>
@@ -441,7 +345,7 @@ function ForTeams() {
             Formez toute votre équipe, <span className="text-copper-light">sur vos propres outils.</span>
           </h2>
           <p className="max-w-[560px] text-lg text-mal-fog">
-            On part de vos fichiers, de vos logiciels et du niveau de chacun. Vous recevez un programme et un devis, puis on fixe les dates avec vous.
+            On part de vos objectifs et de vos outils. Vous recevez un programme et un devis, puis nous convenons du format et des dates avec vous.
           </p>
           <div className="flex flex-wrap gap-3 pt-2">
             <ButtonLink to={routes.contact} variant="light-cu" arrow>
@@ -529,24 +433,21 @@ function Enrollment({
         <div className="flex min-w-0 flex-[1_1_340px] flex-col gap-5">
           <span className="eyebrow text-copper">Inscription</span>
           <h2 id="enroll-title" className="text-[clamp(36px,4.4vw,58px)] font-extrabold">
-            Réservez votre place.
+            Demandez votre devis.
           </h2>
-          <p className="text-lg text-ink-soft">On vous rappelle pour confirmer la date, le lieu et les modalités de paiement. Vous ne payez rien en remplissant ce formulaire.</p>
+          <p className="text-lg text-ink-soft">Toutes nos formations sont sur devis. Nous vous recontactons pour préciser le programme, le format et les modalités.</p>
 
           {course === ADVICE ? (
             <div className="card reveal flex flex-col gap-1.5 p-6 text-[15px] text-ink-soft">
               <span className="font-display text-[22px] font-bold text-ink">On vous aide à choisir.</span>
-              Décrivez votre niveau et vos objectifs dans le formulaire : on vous propose la formation adaptée.
+              Décrivez vos objectifs dans le formulaire : nous vous proposerons un programme adapté.
             </div>
           ) : picked ? (
             <div key={picked.slug} className="card reveal flex flex-col gap-3 p-6">
-              <div className="flex items-center justify-between gap-3">
-                <span className="font-mono text-xs uppercase tracking-[0.12em] text-copper">{picked.domain}</span>
-                <LevelMeter level={picked.level} />
-              </div>
+              <span className="font-mono text-xs uppercase tracking-[0.12em] text-copper">{picked.domain}</span>
               <p className="font-display text-[22px] font-bold leading-[1.2]">{picked.title}</p>
               <p className="text-[15px] text-ink-muted">
-                <Ph>{picked.duration}</Ph> · <Ph>{picked.price}</Ph> / pers. · {format}
+                {picked.duration} · {picked.price} · {format}
               </p>
             </div>
           ) : (
@@ -561,7 +462,7 @@ function Enrollment({
             <span className="font-mono text-lg">{site.phone}</span>
             <span className="pt-2 text-ink-muted">Par WhatsApp</span>
             <span>
-              <Ph>{site.whatsapp}</Ph>
+              {site.whatsapp}
             </span>
           </div>
         </div>
@@ -615,7 +516,7 @@ function Enrollment({
                     <option value="">Choisir une formation</option>
                     {trainings.map((t) => (
                       <option key={t.slug} value={t.slug}>
-                        {t.title} ({t.level})
+                        {t.title}
                       </option>
                     ))}
                     <option value={ADVICE}>Je ne sais pas encore, conseillez-moi</option>
@@ -656,7 +557,7 @@ function Enrollment({
                 </Field>
               </div>
 
-              <Field id="i-msg" label="Votre niveau ou vos attentes">
+              <Field id="i-msg" label="Vos objectifs et attentes">
                 <textarea className="input resize-y" id="i-msg" name="message" rows={4} placeholder="Ce que vous savez déjà faire, ce que vous voulez apprendre, vos disponibilités." />
               </Field>
 

@@ -3,32 +3,26 @@ import { InkCta } from '@/components/layout/CtaBand'
 import { Accordion } from '@/components/ui/accordion'
 import { ButtonLink } from '@/components/ui/button'
 import { Check } from '@/components/ui/icons'
-import { Ph } from '@/components/ui/placeholder'
 import { pricingFaq } from '@/data/faq'
-import { assistancePlans, comparison, creationPlans, paymentMethods, type Plan } from '@/data/pricing'
+import { assistancePlans, creationPlans, paymentMethods, type Plan } from '@/data/pricing'
 import { usePageMeta } from '@/hooks/usePageMeta'
 import { routes } from '@/lib/routes'
-import { cn } from '@/lib/utils'
 
 type Tab = 'creation' | 'assistance'
 
 function PlanCard({ plan }: { plan: Plan }) {
-  const dark = !!plan.recommended
   return (
-    <article className={cn('card lift pop-in relative flex flex-col gap-5 px-8 py-9', dark && 'bg-ink text-white')}>
-      {plan.recommended && <span className="chip absolute -top-4 left-7 bg-copper text-white">Recommandé</span>}
+    <article className="card lift pop-in relative flex flex-col gap-5 px-8 py-9">
       <div className="flex flex-col gap-1.5">
         <h2 className="text-[32px] font-extrabold">{plan.name}</h2>
-        <p className={dark ? 'text-mal-fog' : 'text-ink-soft'}>{plan.pitch}</p>
+        <p className="text-ink-soft">{plan.pitch}</p>
       </div>
-      <div className={cn('flex flex-col gap-0.5 border-y py-[18px]', dark ? 'border-[#33403B]' : 'border-line')}>
-        <span className={cn('text-sm', dark ? 'text-mal-fog' : 'text-ink-soft')}>{plan.price ? 'à partir de' : 'prix'}</span>
-        <span className="font-display text-5xl font-extrabold leading-[1.05] tracking-[-0.03em]">
+      <div className="flex flex-col gap-0.5 border-y border-line py-[18px]">
+        <span className="text-sm text-ink-soft">{plan.price ? 'à partir de' : 'prix'}</span>
+        <span className="font-display text-[64px] font-extrabold leading-[1.05] tracking-[-0.03em] text-ink">
           {plan.price ? (
             <>
-              <Ph dark={dark} className="text-[0.45em]">
-                {plan.price}
-              </Ph>{' '}
+              <span>{plan.price}</span>{' '}
               ${plan.unit && <span className="text-[0.4em] font-semibold">{plan.unit}</span>}
             </>
           ) : (
@@ -39,12 +33,12 @@ function PlanCard({ plan }: { plan: Plan }) {
       <ul className="flex flex-grow flex-col gap-3">
         {plan.features.map((feature) => (
           <li key={feature} className="flex items-start gap-2.5">
-            <Check className={cn('mt-1 flex-none', dark ? 'text-mal-glow' : 'text-mal')} />
+            <Check className="mt-1 flex-none text-mal" />
             <span>{feature}</span>
           </li>
         ))}
       </ul>
-      <ButtonLink to={routes.contact} variant={dark ? 'light-cu' : 'ghost'} className="w-full">
+      <ButtonLink to={routes.contact} variant="ghost" className="w-full">
         {plan.cta}
       </ButtonLink>
     </article>
@@ -73,7 +67,7 @@ export default function Pricing() {
               Création de site et d’app
             </button>
             <button type="button" aria-pressed={tab === 'assistance'} onClick={() => setTab('assistance')}>
-              Assistance mensuelle
+              Réseaux, IA et automatisation
             </button>
           </div>
         </div>
@@ -86,59 +80,7 @@ export default function Pricing() {
               <PlanCard key={plan.name} plan={plan} />
             ))}
           </div>
-          <p className="mt-7 text-center text-[15px] text-ink-muted">Prix hors taxes. Paiement possible en plusieurs fois pour les projets de création.</p>
-        </div>
-      </section>
-
-      <section aria-labelledby="compare-title" className="border-t-[1.5px] border-ink bg-stone py-[120px]">
-        <div className="wrap flex flex-col gap-10">
-          <div className="flex max-w-[760px] flex-col gap-[18px]">
-            <span className="eyebrow text-copper">Comparer</span>
-            <h2 id="compare-title" className="text-[clamp(36px,4.4vw,58px)] font-extrabold">
-              Le détail des formules de création.
-            </h2>
-          </div>
-          <div className="overflow-x-auto rounded-[22px] border-[1.5px] border-ink bg-white">
-            <table className="w-full min-w-[720px] border-collapse text-base">
-              <caption className="sr-only-label">Comparaison des formules Essentiel, Business et Sur mesure</caption>
-              <thead>
-                <tr className="bg-ink text-white">
-                  <th scope="col" className="px-6 py-5 text-left font-semibold">
-                    Inclus
-                  </th>
-                  <th scope="col" className="px-4 py-5 text-center font-display text-xl">
-                    Essentiel
-                  </th>
-                  <th scope="col" className="bg-copper px-4 py-5 text-center font-display text-xl">
-                    Business
-                  </th>
-                  <th scope="col" className="px-4 py-5 text-center font-display text-xl">
-                    Sur mesure
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparison.map((row) => (
-                  <tr key={row.label} className="trow">
-                    <th scope="row" className="border-t border-line px-6 py-4 text-left font-medium">
-                      {row.label}
-                    </th>
-                    {row.cells.map((cell, i) => (
-                      <td key={i} className="border-t border-line p-4 text-center">
-                        {cell === true && <Check size={22} strokeWidth={2.4} className="inline text-mal" aria-hidden={false} aria-label="Inclus" role="img" />}
-                        {cell === false && (
-                          <span aria-label="Non inclus" className="text-[#8A958F]">
-                            —
-                          </span>
-                        )}
-                        {typeof cell === 'string' && <Ph>{cell}</Ph>}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <p className="mt-7 text-center text-[15px] text-ink-muted">Les prix affichés sont des prix de départ. Les réseaux, l’IA et l’automatisation sont proposés sur devis.</p>
         </div>
       </section>
 

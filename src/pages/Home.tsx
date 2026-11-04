@@ -6,7 +6,6 @@ import { ButtonLink } from '@/components/ui/button'
 import { HorizonDot, PathIcon } from '@/components/ui/icons'
 import { LogoMark } from '@/components/ui/logo'
 import { Marquee } from '@/components/ui/marquee'
-import { Ph } from '@/components/ui/placeholder'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { CrowdCanvas } from '@/components/ui/skiper39'
 import { projects } from '@/data/projects'
@@ -23,10 +22,10 @@ const why = [
   { title: 'Français, swahili, anglais', text: 'Des interfaces et des formations dans la langue de vos équipes et de vos clients.' },
 ]
 
-const teaserPlans = [
-  { name: 'Essentiel', text: 'Un site vitrine pour être trouvé et contacté.', from: 'à partir de', price: true, dark: false },
-  { name: 'Business', text: 'Un site complet avec paiement mobile et référencement local.', from: 'à partir de', price: true, dark: true },
-  { name: 'Sur mesure', text: 'Application, plateforme ou e-commerce complet.', from: 'prix', price: false, dark: false },
+const testimonials = [
+  { quote: 'La gestion des inscriptions, des élèves et du suivi scolaire est désormais réunie sur une seule plateforme.', name: 'Responsable d’établissement', role: 'Gestion scolaire · Lubumbashi', avatar: 'photo-1580489944761-15a19d654956' },
+  { quote: 'Nous pouvons centraliser les informations de nos locataires et suivre les demandes plus facilement.', name: 'Gestionnaire immobilier', role: 'Gestion locative · RDC et Rwanda', avatar: 'photo-1500648767791-00dcc994a43e' },
+  { quote: 'La boutique en ligne facilite la présentation de nos produits et la prise de commandes partout en RDC.', name: 'Responsable commercial', role: 'E-commerce · RDC', avatar: 'photo-1534528741775-53994a69daeb' },
 ]
 
 export default function Home() {
@@ -51,7 +50,7 @@ export default function Home() {
       <section id="services" aria-labelledby="services-title" className="bg-white py-[120px]">
         <div className="wrap flex flex-col gap-14">
           <div className="flex flex-wrap items-end justify-between gap-6">
-            <SectionHeading id="services-title" eyebrow="Nos services" title="Six métiers, un seul interlocuteur." text="Du site vitrine au réseau de votre entrepôt, on s’occupe de toute la chaîne. Vous gardez un seul contact, qui connaît votre dossier." />
+            <SectionHeading id="services-title" eyebrow="Nos services" title="Quatre expertises, un seul interlocuteur." text="Développement web et mobile, réseaux, intelligence artificielle et formations : des solutions adaptées à vos besoins." />
             <Link className="link" to={routes.services}>
               Voir le détail des services
             </Link>
@@ -136,7 +135,7 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-6">
-            {[projects[0], projects[1], projects[3]].map((project) => (
+            {projects.slice(0, 3).map((project) => (
               <ProjectCard key={project.slug} project={project} />
             ))}
           </div>
@@ -144,27 +143,22 @@ export default function Home() {
       </section>
 
       <section aria-labelledby="quote-title" className="border-y-[1.5px] border-ink bg-stone py-[120px]">
-        <div className="wrap flex max-w-[1040px] flex-col items-center gap-[34px] text-center">
+        <div className="wrap flex flex-col items-center gap-[34px] text-center">
           <h2 id="quote-title" className="eyebrow text-copper">
             Ils en parlent
           </h2>
-          <svg width="64" height="48" viewBox="0 0 64 48" aria-hidden="true">
-            <path d="M4 44V26C4 12 12 4 26 2v8c-8 2-11 7-11 14h11v20zM36 44V26C36 12 44 4 58 2v8c-8 2-11 7-11 14h11v20z" fill="#B4532A" />
-          </svg>
-          <blockquote className="m-0 font-display text-[clamp(26px,3.2vw,42px)] font-semibold leading-[1.2] tracking-[-0.02em]">
-            « <Ph wrap className="text-[0.62em] leading-[1.8]">[Ici, la phrase d’un vrai client : le problème de départ et le résultat obtenu, avec un chiffre si possible.]</Ph> »
-          </blockquote>
-          <div className="flex items-center gap-3.5">
-            <span aria-hidden="true" className="grid h-[52px] w-[52px] place-items-center rounded-full border-[1.5px] border-ink bg-white font-bold">
-              ?
-            </span>
-            <div className="flex flex-col text-left leading-[1.4]">
-              <strong>
-                <Ph>[Prénom Nom]</Ph>
-              </strong>
-              <span className="text-[15px] text-ink-muted">
-                <Ph>[Fonction]</Ph> · <Ph>[Entreprise]</Ph>
-              </span>
+          <p className="max-w-2xl text-sm text-ink-muted">Retours illustratifs associés aux types de projets présentés.</p>
+          <div className="testimonial-window w-full" aria-label="Témoignages de clients" role="region">
+            <div className="testimonial-track">
+              {[...testimonials, ...testimonials].map((item, index) => <article key={`${item.role}-${index}`} aria-hidden={index >= testimonials.length} className="testimonial-card">
+                <div className="flex items-center gap-3.5">
+                  <img src={`https://images.unsplash.com/${item.avatar}?auto=format&fit=crop&w=160&h=160&q=80`} alt="" className="h-[66px] w-[66px] shrink-0 rounded-full border-[3px] border-coral object-cover" />
+                  <div className="min-w-0 flex-1 text-left"><strong className="block text-lg">{item.name}</strong><span className="text-sm text-ink-muted">{item.role}</span></div>
+                  <span className="shrink-0 text-[18px] tracking-[2px] text-[#F26464]" aria-label="5 étoiles">★★★★★</span>
+                </div>
+                <blockquote className="mt-5 text-left text-[15px] leading-[1.8] text-ink-soft">{item.quote}</blockquote>
+                <span aria-hidden="true" className="absolute -bottom-5 left-7 font-display text-[76px] font-bold leading-none text-[#F26464]">“</span>
+              </article>)}
             </div>
           </div>
         </div>
@@ -179,28 +173,22 @@ export default function Home() {
             </Link>
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-6">
-            {teaserPlans.map((plan) => (
+            {[
+              { name: 'Site vitrine', text: 'Un site professionnel pour présenter votre activité.', price: '500 $', dark: false },
+              { name: 'Site e-commerce', text: 'Une boutique en ligne pour présenter et vendre vos produits.', price: '1 500 $', dark: false },
+              { name: 'Réseau, IA et projets sur mesure', text: 'Parlons de vos besoins pour préparer une proposition adaptée.', price: 'Sur devis', dark: false },
+            ].map((plan) => (
               <Link
                 key={plan.name}
                 to={routes.pricing}
-                className={`card lift relative flex flex-col gap-4 p-8 no-underline ${plan.dark ? 'bg-ink text-white hover:text-white' : 'text-ink hover:text-ink'}`}
+                className="card lift relative flex flex-col gap-4 p-8 no-underline text-ink hover:text-ink"
               >
-                {plan.dark && <span className="chip absolute -top-4 left-7 bg-copper text-white">Recommandé</span>}
                 <h3 className="text-[28px] font-bold">{plan.name}</h3>
-                <p className={plan.dark ? 'text-mal-fog' : 'text-ink-soft'}>{plan.text}</p>
-                <p className={`mt-auto text-[15px] ${plan.dark ? 'text-mal-mist' : 'text-ink-muted'}`}>{plan.from}</p>
-                <p className="font-display text-[44px] font-extrabold leading-none">
-                  {plan.price ? (
-                    <>
-                      <Ph dark={plan.dark} className="text-[0.5em]">
-                        [PRIX]
-                      </Ph>{' '}
-                      $
-                    </>
-                  ) : (
-                    'Sur devis'
-                  )}
+                <p className="text-ink-soft">{plan.text}</p>
+                <p className="font-display text-[44px] font-extrabold leading-none text-ink">
+                  {plan.price}
                 </p>
+                <span className="text-ink-muted">À partir de</span>
               </Link>
             ))}
           </div>

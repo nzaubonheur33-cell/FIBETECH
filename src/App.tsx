@@ -8,15 +8,16 @@ import Home from '@/pages/Home'
 // affichage reste léger, même en 3G.
 const Services = lazy(() => import('@/pages/Services'))
 const ServiceWeb = lazy(() => import('@/pages/ServiceWeb'))
+const ServiceDetail = lazy(() => import('@/pages/ServiceDetail'))
 const Training = lazy(() => import('@/pages/Training'))
 const Pricing = lazy(() => import('@/pages/Pricing'))
 const Work = lazy(() => import('@/pages/Work'))
-const CaseStudy = lazy(() => import('@/pages/CaseStudy'))
+const ProjectDetail = lazy(() => import('@/pages/ProjectDetail'))
 const About = lazy(() => import('@/pages/About'))
 const Blog = lazy(() => import('@/pages/Blog'))
 const Contact = lazy(() => import('@/pages/Contact'))
-const Careers = lazy(() => import('@/pages/Careers'))
 const Faq = lazy(() => import('@/pages/Faq'))
+const LegalPage = lazy(() => import('@/pages/LegalPage'))
 const NotFound = lazy(() => import('@/pages/NotFound'))
 
 const Router = import.meta.env.VITE_HASH_ROUTER === 'true' ? HashRouter : BrowserRouter
@@ -29,15 +30,19 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path={routes.services} element={<Services />} />
           <Route path={routes.web} element={<ServiceWeb />} />
+          <Route path={routes.reseau} element={<ServiceDetail kind="reseau" />} />
+          <Route path={routes.ia} element={<ServiceDetail kind="ia" />} />
           <Route path={routes.training} element={<Training />} />
           <Route path={routes.pricing} element={<Pricing />} />
           <Route path={routes.work} element={<Work />} />
-          <Route path={routes.caseStudy} element={<CaseStudy />} />
+          <Route path="/realisations/:slug" element={<ProjectDetail />} />
           <Route path={routes.about} element={<About />} />
           <Route path={routes.blog} element={<Blog />} />
           <Route path={routes.contact} element={<Contact />} />
-          <Route path={routes.careers} element={<Careers />} />
           <Route path={routes.faq} element={<Faq />} />
+          <Route path={routes.legal} element={<LegalPage kind="legal" />} />
+          <Route path={routes.privacy} element={<LegalPage kind="privacy" />} />
+          <Route path={routes.terms} element={<LegalPage kind="terms" />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

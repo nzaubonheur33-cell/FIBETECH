@@ -9,11 +9,8 @@ const columns = [
     title: 'Services',
     links: [
       { to: routes.web, label: 'Web et mobile' },
-      { to: `${routes.services}?s=it`, label: 'Assistance IT' },
-      { to: `${routes.services}?s=transfo`, label: 'Transformation numérique' },
-      { to: `${routes.services}?s=ia`, label: 'IA et automatisation' },
-      { to: `${routes.services}?s=reseaux`, label: 'Réseaux' },
-      { to: `${routes.services}?s=conseil`, label: 'Conseil digital' },
+      { to: routes.ia, label: 'IA et automatisation' },
+      { to: routes.reseau, label: 'Réseaux' },
       { to: routes.training, label: 'Formations' },
     ],
   },
@@ -22,7 +19,6 @@ const columns = [
     links: [
       { to: routes.about, label: 'À propos' },
       { to: routes.work, label: 'Réalisations' },
-      { to: routes.careers, label: 'Carrières' },
       { to: routes.blog, label: 'Blog' },
     ],
   },
@@ -103,9 +99,7 @@ export default function Footer() {
               <h2 className={columnTitle}>Contact</h2>
               <ul className="m-0 flex list-none flex-col gap-2 p-0 text-mal-fog">
                 <li className="font-mono text-sm">{site.phone}</li>
-                <li>
-                  <span className="ph-d">{site.email}</span>
-                </li>
+                <li><a className="flink" href={`mailto:${site.email}`}>{site.email}</a></li>
                 <li>
                   <span className="ph-d">{site.address}</span>, {site.city}
                 </li>
@@ -124,31 +118,20 @@ export default function Footer() {
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-7 text-sm text-mal-mist">
           <span>© {new Date().getFullYear()} Fibetech. Tous droits réservés.</span>
           <span className="flex flex-wrap gap-[18px]">
-            <Link className="flink" to={routes.faq}>
+            <Link className="flink" to={routes.legal}>
               Mentions légales
             </Link>
-            <Link className="flink" to={routes.faq}>
+            <Link className="flink" to={routes.privacy}>
               Confidentialité
             </Link>
-            <Link className="flink" to={routes.faq}>
+            <Link className="flink" to={routes.terms}>
               Conditions générales
             </Link>
           </span>
           <span className="font-mono text-xs tracking-[0.06em]">
-            {site.coordsLong} · {site.city}, {site.region}
+            {site.city}, {site.region}
           </span>
         </div>
-        <p className="-mt-12 text-xs text-mal-mist/80">
-          Animation du hero d’après{' '}
-          <a className="flink underline" href="https://skiper-ui.com/" target="_blank" rel="noreferrer">
-            Skiper UI
-          </a>{' '}
-          · Illustrations{' '}
-          <a className="flink underline" href="https://www.openpeeps.com/" target="_blank" rel="noreferrer">
-            Open Peeps
-          </a>{' '}
-          (CC0)
-        </p>
       </div>
 
       <div

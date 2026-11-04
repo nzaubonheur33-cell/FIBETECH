@@ -8,8 +8,9 @@ import { routes } from '@/lib/routes'
 import { site } from '@/lib/site'
 
 const serviceOptions = ['Site web', 'Application mobile', 'Assistance IT', 'Transformation numérique', 'IA et automatisation', 'Réseaux', 'Formation', 'Conseil']
-const budgetOptions = ['Moins de [X] $', 'Entre [X] et [Y] $', 'Plus de [Y] $', 'Je ne sais pas encore']
+const budgetOptions = ['Moins de 500 $', '500 à 1 499 $', '1 500 à 2 999 $', '3 000 $ et plus', 'À définir sur devis']
 const contactOptions = ['Appel', 'WhatsApp', 'E-mail'] as const
+const mapQuery = encodeURIComponent('Route Kasapa, Lubumbashi, République démocratique du Congo')
 
 type Errors = Partial<Record<'name' | 'phone' | 'message' | 'consent', string>>
 
@@ -86,15 +87,8 @@ export default function Contact() {
               </span>
             </div>
             <div className="card overflow-hidden">
-              <div aria-hidden="true" className="grid-paper relative h-[200px] border-b-[1.5px] border-ink bg-[length:34px_34px]">
-                <svg viewBox="0 0 340 200" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-                  <path d="M-10 150 C 70 120, 120 170, 190 140 S 300 90, 350 110" fill="none" stroke="#8DB7C9" strokeWidth={8} strokeLinecap="round" />
-                  <path d="M50 -10 L120 210 M-10 70 L350 95 M220 -10 L260 210" stroke="#FFFFFF" strokeWidth={10} />
-                </svg>
-                <div className="absolute left-[48%] top-[44%]">
-                  <span className="ping-map absolute -left-[9px] -top-[9px] h-[18px] w-[18px] rounded-full bg-copper" />
-                  <span className="absolute -left-[9px] -top-[9px] h-[18px] w-[18px] rounded-full border-[3px] border-white bg-copper" />
-                </div>
+              <div className="relative h-[240px] border-b-[1.5px] border-ink">
+                <iframe title={`Carte Google Maps : ${site.fullAddress}`} src={`https://maps.google.com/maps?q=${mapQuery}&z=15&output=embed`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="absolute inset-0 h-full w-full border-0" />
               </div>
               <div className="flex flex-col gap-1 px-[26px] py-[22px]">
                 <span className="font-semibold">
@@ -104,6 +98,7 @@ export default function Contact() {
                   <Ph>{site.hours}</Ph>
                 </span>
                 <span className="pt-1.5 font-mono text-xs text-ink-muted">{site.coords}</span>
+                <a className="link mt-1 self-start" href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`} target="_blank" rel="noreferrer">Ouvrir dans Google Maps</a>
               </div>
             </div>
           </aside>
@@ -204,7 +199,7 @@ export default function Contact() {
                     Envoyer ma demande
                   </Button>
                   <span className="text-sm text-ink-muted">
-                    Réponse sous <Ph>[délai]</Ph>, jours ouvrés.
+                    Recevez le prix et le délai estimé sous 24 heures.
                   </span>
                 </div>
               </form>

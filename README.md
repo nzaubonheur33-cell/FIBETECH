@@ -1,4 +1,4 @@
-# Fibetech — site vitrine (frontend)
+# Fibetech
 
 Site de Fibetech, startup informatique de Lubumbashi. Il compte 13 pages : accueil, services, détail web et mobile, formations, tarifs, réalisations, étude de cas, à propos, blog, contact et devis, carrières, FAQ et page 404. Toutes suivent les maquettes validées, sauf la page Formations, ajoutée ensuite dans le même style.
 
@@ -13,13 +13,13 @@ npm install
 npm run dev          # http://localhost:5173
 ```
 
-| Script | Rôle |
-| --- | --- |
-| `npm run dev` | Serveur de développement avec rechargement à chaud |
-| `npm run typecheck` | Vérification TypeScript sans compiler |
-| `npm run build` | Build de production dans `dist/` (URL propres : `/tarifs`, `/contact`…) |
+| Script                 | Rôle                                                                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`        | Serveur de développement avec rechargement à chaud                                                                       |
+| `npm run typecheck`  | Vérification TypeScript sans compiler                                                                                     |
+| `npm run build`      | Build de production dans `dist/` (URL propres : `/tarifs`, `/contact`…)                                             |
 | `npm run build:demo` | Build « démo » avec des URL en `#/tarifs`, qui fonctionne sur n'importe quel hébergement statique sans configuration |
-| `npm run preview` | Sert le dossier `dist/` pour le tester en local |
+| `npm run preview`    | Sert le dossier `dist/` pour le tester en local                                                                          |
 
 ## Structure
 

@@ -43,15 +43,8 @@ export default function Blog() {
           <div className="wrap">
             <Link to={routes.blog} className="card lift flex flex-wrap overflow-hidden text-ink no-underline hover:text-ink">
               <div aria-hidden="true" className="relative min-h-[420px] min-w-0 flex-[1_1_520px] overflow-hidden border-ink bg-mal min-[1000px]:border-r-[1.5px] max-[999px]:border-b-[1.5px] max-[760px]:min-h-[280px]">
-                <div className="absolute inset-0" style={{ background: 'radial-gradient(circle, rgba(255,255,255,.1) 0 2px, transparent 3px) 0 0/26px 26px' }} />
-                <svg viewBox="0 0 520 420" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-                  <g className="sunup">
-                    <path d="M140 300a120 120 0 0 1 240 0z" fill="#E0A93B" />
-                  </g>
-                  <rect x={0} y={300} width={520} height={120} fill="#0E5A45" />
-                  <path d="M0 300h520" stroke="#FFFFFF" strokeWidth={3} />
-                  <path d="M150 330h220M200 360h120" stroke="#FFFFFF" strokeWidth={2} strokeLinecap="round" opacity={0.6} />
-                </svg>
+                <img src={`https://images.unsplash.com/${featuredPost.image}?auto=format&fit=crop&w=1200&q=85`} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/60 via-transparent to-transparent" />
                 <span className="absolute left-6 top-6 rounded-full bg-white px-3 py-1.5 font-mono text-xs">À la une</span>
               </div>
               <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-[18px] p-11 max-[760px]:p-7">
@@ -78,7 +71,7 @@ export default function Blog() {
             {visible.map((post) => (
               <li key={post.slug} className="pop-in">
                 <Link to={routes.blog} className="card lift flex h-full flex-col overflow-hidden text-ink no-underline hover:text-ink">
-                  <div aria-hidden="true" className="h-[210px] border-b-[1.5px] border-ink transition-[filter] duration-500" style={{ background: post.cover }} />
+                  <div className="h-[210px] overflow-hidden border-b-[1.5px] border-ink"><img src={`https://images.unsplash.com/${post.image}?auto=format&fit=crop&w=900&h=600&q=80`} alt={`Illustration : ${post.title}`} loading="lazy" className="h-full w-full object-cover transition-transform duration-500 hover:scale-[1.04]" /></div>
                   <div className="flex flex-grow flex-col gap-3 px-[26px] pb-7 pt-6">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="chip bg-stone text-[#2F3833]">{post.cat}</span>

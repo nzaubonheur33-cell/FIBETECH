@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import { ButtonLink } from '@/components/ui/button'
 import { Wordmark } from '@/components/ui/logo'
 import { Ph } from '@/components/ui/placeholder'
@@ -15,10 +14,10 @@ const values = [
 
 // Membres de l'équipe : remplacer les initiales par des photos et compléter les noms.
 const team = [
-  { initials: 'A', role: 'Développement web et mobile', bg: '#FCEBDD' },
-  { initials: 'B', role: 'Réseaux et infrastructures', bg: '#DDF2E9' },
-  { initials: 'C', role: 'Support IT et formation', bg: '#E9D8BE' },
-  { initials: 'D', role: 'Relation client et projets', bg: '#D7E6EE' },
+  { name: 'Emmanuel Kayombo', role: 'Développeur full stack et IA', image: 'photo-1500648767791-00dcc994a43e' },
+  { name: 'Bonheur Nzau', role: 'Développeur frontend et réseaux', image: 'photo-1506794778202-cad84cf45f1d' },
+  { name: 'Jonathan Nathan', role: 'Relation clients et réseaux sociaux', image: 'photo-1507003211169-0a1dd7228f2d' },
+  { name: 'Kaleb', role: 'Base de données', image: 'photo-1501196354995-cbb51c65aaea' },
 ]
 
 export default function About() {
@@ -37,19 +36,15 @@ export default function About() {
               On aide les entreprises, les écoles et les organisations du Haut-Katanga à utiliser la technologie sans se perdre dans le jargon ni dépendre de prestataires lointains.
             </p>
           </div>
-          <div aria-hidden="true" className="relative h-[420px] min-w-0 flex-[1_1_420px] max-[760px]:h-[300px]">
-            <svg viewBox="0 0 420 420" className="absolute inset-0 h-full w-full">
-              <g className="spin-xslow" style={{ transformOrigin: '210px 330px' }}>
-                <circle cx={210} cy={330} r={190} fill="none" stroke="#121614" strokeWidth={1.5} strokeDasharray="3 9" />
-              </g>
-              <circle cx={210} cy={330} r={150} fill="none" stroke="#0E5A45" strokeWidth={1.5} />
-              <g className="sunup">
-                <path d="M100 330a110 110 0 0 1 220 0z" fill="#B4532A" />
-              </g>
-              <rect x={0} y={330} width={420} height={90} fill="#FFFFFF" />
-              <path d="M0 330h420" stroke="#121614" strokeWidth={3} />
-              <path d="M120 360h180M170 390h80" stroke="#121614" strokeWidth={2} strokeLinecap="round" />
-            </svg>
+          <div aria-hidden="true" className="relative flex min-h-[420px] min-w-0 flex-[1_1_420px] items-center justify-center py-10 max-[760px]:min-h-[310px]">
+            <div className="absolute inset-[8%] rounded-[38%] border border-mal/20" />
+            <div className="absolute inset-[18%] rounded-[34%] border border-dashed border-copper/35" />
+            <div className="relative w-[88%] max-w-[460px] -rotate-2 rounded-[22px] border-[1.5px] border-ink bg-white p-5 shadow-[12px_12px_0_#121614]">
+              <div className="flex items-center gap-2 border-b border-line pb-4"><span className="h-2.5 w-2.5 rounded-full bg-copper"/><span className="h-2.5 w-2.5 rounded-full bg-mustard"/><span className="h-2.5 w-2.5 rounded-full bg-mal"/><span className="ml-auto rounded-full bg-stone px-3 py-1 font-mono text-[11px] text-ink-soft">fibetech.cd</span></div>
+              <div className="grid grid-cols-[1fr_0.8fr] gap-4 py-5"><div className="flex flex-col justify-center gap-3"><span className="h-3 w-4/5 rounded-full bg-ink"/><span className="h-3 w-full rounded-full bg-line"/><span className="h-3 w-3/4 rounded-full bg-line"/><span className="mt-2 h-9 w-28 rounded-full bg-copper"/></div><div className="grid aspect-square place-items-center rounded-2xl bg-mal-deep"><svg viewBox="0 0 100 100" className="w-3/4"><path d="M20 25h60M20 50h60M20 75h60M30 20v60M50 20v60M70 20v60" stroke="#3FBF8E" strokeWidth="2" opacity=".55"/><circle cx="50" cy="50" r="10" fill="#E8A07A"/><circle cx="50" cy="50" r="20" fill="none" stroke="#E8A07A" strokeWidth="2"/></svg></div></div>
+            </div>
+            <span className="absolute bottom-[13%] left-[3%] rounded-full border border-ink bg-copper-soft px-4 py-2 font-mono text-xs text-copper-deep">Solutions numériques locales</span>
+            <span className="absolute right-[3%] top-[12%] rounded-full border border-ink bg-mal-deep px-4 py-2 font-mono text-xs text-white">RDC · Lubumbashi</span>
           </div>
         </div>
       </section>
@@ -138,21 +133,15 @@ export default function About() {
                 Les visages derrière vos projets.
               </h2>
             </div>
-            <Link className="link" to={routes.careers}>
-              Nous rejoindre
-            </Link>
           </div>
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,250px),1fr))] gap-6">
             {team.map((member) => (
-              <li key={member.initials} className="card lift flex flex-col overflow-hidden">
-                <div aria-hidden="true" className="relative grid h-[260px] place-items-center border-b-[1.5px] border-ink" style={{ background: member.bg }}>
-                  <span className="grid h-[120px] w-[120px] place-items-center rounded-full border-[1.5px] border-ink bg-white font-display text-[40px] font-extrabold">{member.initials}</span>
-                  <span className="absolute bottom-3 left-3 rounded-md bg-white px-2 py-0.5 font-mono text-[11px] text-ink-soft">photo à venir</span>
+              <li key={member.name} className="card lift flex flex-col overflow-hidden">
+                <div className="relative h-[280px] overflow-hidden border-b-[1.5px] border-ink bg-stone">
+                  <img src={`https://images.unsplash.com/${member.image}?auto=format&fit=crop&w=800&h=700&q=85`} alt={`Portrait de ${member.name}`} loading="lazy" className="h-full w-full object-cover object-center transition-transform duration-500 hover:scale-[1.04]" />
                 </div>
                 <div className="flex flex-col gap-1 px-6 pb-[26px] pt-[22px]">
-                  <h3 className="text-[22px] font-bold">
-                    <Ph>[Prénom Nom]</Ph>
-                  </h3>
+                  <h3 className="text-[22px] font-bold">{member.name}</h3>
                   <p className="text-ink-soft">{member.role}</p>
                 </div>
               </li>
@@ -174,7 +163,7 @@ export default function About() {
                 <div className="flex flex-wrap gap-x-4 gap-y-1.5">
                   <dt className="min-w-[90px] text-ink-muted">Adresse</dt>
                   <dd className="m-0">
-                    <Ph>{site.fullAddress}</Ph>, {site.city}
+                    {site.fullAddress}
                   </dd>
                 </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-1.5">
@@ -201,17 +190,13 @@ export default function About() {
 }
 
 function MapCard() {
+  const mapQuery = encodeURIComponent('Route Kasapa, Lubumbashi, République démocratique du Congo')
   return (
-    <div aria-hidden="true" className="grid-paper relative min-h-[420px] min-w-0 flex-[1_1_420px] border-ink bg-[length:44px_44px] min-[900px]:border-l-[1.5px] max-[899px]:border-t-[1.5px]">
-      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full">
-        <path d="M-10 280 C 80 240, 140 300, 220 250 S 360 180, 420 210" fill="none" stroke="#8DB7C9" strokeWidth={10} strokeLinecap="round" />
-        <path d="M60 -10 L150 420 M-10 120 L420 160 M250 -10 L300 420" stroke="#FFFFFF" strokeWidth={12} />
-        <path d="M60 -10 L150 420 M-10 120 L420 160 M250 -10 L300 420" stroke="#C9D1CC" strokeWidth={1.5} />
-      </svg>
+    <div className="relative min-h-[420px] min-w-0 flex-[1_1_420px] overflow-hidden border-ink min-[900px]:border-l-[1.5px] max-[899px]:border-t-[1.5px]">
+      <iframe title={`Carte de localisation : ${site.fullAddress}`} src={`https://maps.google.com/maps?q=${mapQuery}&z=14&output=embed`} loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="absolute inset-0 h-full min-h-[420px] w-full border-0 grayscale-[15%]" />
       <div className="absolute left-[52%] top-[40%]">
-        <span className="ping-map absolute -left-2.5 -top-2.5 h-5 w-5 rounded-full bg-copper" />
-        <span className="absolute -left-2.5 -top-2.5 h-5 w-5 rounded-full border-[3px] border-white bg-copper" />
-        <span className="absolute -top-4 left-[18px] whitespace-nowrap rounded-full border-[1.5px] border-ink bg-white px-2.5 py-1 font-mono text-xs">Fibetech · {site.city}</span>
+        <a href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`} target="_blank" rel="noreferrer" aria-label={`Ouvrir la carte de ${site.fullAddress}`} className="absolute -left-2.5 -top-2.5 grid h-5 w-5 place-items-center rounded-full border-[3px] border-white bg-copper shadow-[0_0_0_2px_#121614]" />
+        <a href={`https://www.google.com/maps/search/?api=1&query=${mapQuery}`} target="_blank" rel="noreferrer" className="absolute -top-4 left-[18px] whitespace-nowrap rounded-full border-[1.5px] border-ink bg-white px-2.5 py-1 font-mono text-xs text-ink shadow-md">Fibetech · {site.city}</a>
       </div>
     </div>
   )
