@@ -1,0 +1,36 @@
+{
+  "name": "fibetech-site",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Site vitrine de Fibetech, startup informatique à Lubumbashi (frontend).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "build:demo": "tsc --noEmit && vite build --mode demo",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "5.1.0",
+    "@fontsource-variable/figtree": "5.1.0",
+    "@fontsource/jetbrains-mono": "5.1.0",
+    "clsx": "2.1.1",
+    "gsap": "3.12.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-router-dom": "6.28.0",
+    "tailwind-merge": "2.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.1",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
+    "@vitejs/plugin-react": "4.3.4",
+    "autoprefixer": "10.4.20",
+    "postcss": "8.4.49",
+    "tailwindcss": "3.4.17",
+    "typescript": "5.6.3",
+    "vite": "5.4.11"
+  }
+}
