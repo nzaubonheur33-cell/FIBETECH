@@ -1,4 +1,7 @@
+'use client'
+
 import { useId, useState } from 'react'
+import { RichInline } from '@/components/rich'
 import { cn } from '@/lib/utils'
 import { Plus } from './icons'
 
@@ -44,7 +47,9 @@ export function Accordion({ items, defaultOpen, headingLevel = 'h3', className }
               </button>
             </Heading>
             <div id={panelId} role="region" aria-labelledby={buttonId} hidden={!isOpen}>
-              <p className="reveal max-w-[700px] pb-6 text-[17px] text-ink-soft">{item.a}</p>
+              <p className="reveal max-w-[700px] pb-6 text-[17px] text-ink-soft">
+                <RichInline text={item.a} />
+              </p>
             </div>
           </div>
         )

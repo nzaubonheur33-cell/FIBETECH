@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { routes } from '@/lib/routes'
+'use client'
+
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState, type ReactNode } from 'react'
+import type { LayoutContent } from '@/content/blocks'
 
 const CONSENT_KEY = 'fibetech-cookie-notice-dismissed'
 
@@ -55,7 +58,7 @@ export function ScrollToTop() {
   return <button type="button" aria-label="Remonter en haut de la page" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className={`scroll-top ${cookieNoticeVisible ? 'scroll-top-raised' : ''}`}><svg aria-hidden="true" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="m5 12 7-7 7 7M12 5v14"/></svg></button>
 }
 
-export function CookieBanner() {
+export function CookieBanner({ cookie }: { cookie: LayoutContent['cookie'] }) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -79,10 +82,34 @@ export function CookieBanner() {
   if (!visible) return null
   return <aside className="cookie-banner" aria-label="Information sur les cookies" aria-live="polite">
     <div className="flex flex-col gap-2">
-      <strong className="font-display text-lg">Cookies et confidentialité</strong>
-      <p className="m-0 text-sm leading-relaxed text-ink-soft">Ce site n’utilise pas de cookies publicitaires ou de mesure d’audience. Seul votre choix de fermeture de ce message est mémorisé sur cet appareil.</p>
-      <Link to={routes.privacy} className="link self-start text-sm">Lire la politique de confidentialité</Link>
+      <strong className="font-display text-lg">{cookie.title}</strong>
+      <p className="m-0 text-sm leading-relaxed text-ink-soft">{cookie.text}</p>
+      <Link href="/confidentialite" className="link self-start text-sm">{cookie.link}</Link>
     </div>
-    <button type="button" className="btn btn-ink mt-4 min-h-10 self-start px-5 text-sm" onClick={dismiss}>J’ai compris</button>
+    <button type="button" className="btn btn-ink mt-4 min-h-10 self-start px-5 text-sm" onClick={dismiss}>{cookie.button}</button>
   </aside>
+}
+
+/** Petite animation d'entrée à chaque changement de page. */
+export function PageTransition({ children }: { children: ReactNode }) {
+  const pathname = usePathname()
+  return (
+    <div key={pathname} className="page-enter">
+      {children}
+    </div>
+  )
+}
+
+export function PageLoader() {
+  return (
+    <div className="grid min-h-[70vh] place-items-center" role="status" aria-live="polite">
+      <div className="flex flex-col items-center gap-5">
+        <span className="loader-mark" aria-hidden="true" />
+        <span className="font-mono text-sm text-ink-muted">Chargement de la page…</span>
+        <span className="loader-track" aria-hidden="true">
+          <span />
+        </span>
+      </div>
+    </div>
+  )
 }

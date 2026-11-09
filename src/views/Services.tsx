@@ -1,68 +1,72 @@
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { CtaBand } from '@/components/layout/CtaBand'
 import { BrowserFrame, PhoneFrame } from '@/components/illustrations/mocks'
+import { RichTitle } from '@/components/rich'
 import { ButtonLink } from '@/components/ui/button'
 import { Check, PathIcon } from '@/components/ui/icons'
 import { Marquee } from '@/components/ui/marquee'
-import { sectors, serviceLists, services, technologies, type Service } from '@/data/services'
-import { usePageMeta } from '@/hooks/usePageMeta'
-import { routes } from '@/lib/routes'
+import type { BlockData, SiteInfo } from '@/content/blocks'
+import type { ServiceItem } from '@/content/types'
 import { cn } from '@/lib/utils'
 
-type RowProps = {
-  id: Service['id']
-  eyebrow: string
-  title: string
-  text: string
-  idealFor?: string
-  cta: { label: string; to: string }
-  secondary?: { label: string; to: string }
-  visual: ReactNode
-  reverse?: boolean
-  tone?: 'white' | 'stone' | 'dark'
-}
-
-function ServiceRow({ id, eyebrow, title, text, idealFor, cta, secondary, visual, reverse, tone = 'white' }: RowProps) {
+function ServiceRow({ service, idealForLabel }: { service: ServiceItem; idealForLabel: string }) {
+  const tone = service.tone
   const dark = tone === 'dark'
+  const id = service.key
   return (
     <section id={id} aria-labelledby={`${id}-title`} className={cn('border-t-[1.5px] border-ink py-24', tone === 'stone' && 'bg-stone', dark && 'bg-mal-deep text-white')}>
-      <div className={cn('wrap flex flex-wrap items-center gap-14', reverse && 'flex-row-reverse flex-wrap-reverse')}>
+      <div className={cn('wrap flex flex-wrap items-center gap-14', dark && 'flex-row-reverse flex-wrap-reverse')}>
         <div className="flex min-w-0 flex-[1_1_480px] flex-col gap-[22px]">
-          <span className={cn('eyebrow', dark ? 'text-copper-light' : 'text-copper')}>{eyebrow}</span>
+          <span className={cn('eyebrow', dark ? 'text-copper-light' : 'text-copper')}>{service.pageEyebrow}</span>
           <h2 id={`${id}-title`} className="text-[clamp(34px,3.8vw,54px)] font-extrabold">
-            {title}
+            <RichTitle text={service.pageTitle} accentClassName={dark ? 'text-copper-light' : 'text-copper'} />
           </h2>
-          <p className={cn('text-lg', dark ? 'text-mal-fog' : 'text-ink-soft')}>{text}</p>
+          <p className={cn('text-lg', dark ? 'text-mal-fog' : 'text-ink-soft')}>{service.pageText}</p>
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,230px),1fr))] gap-x-6 gap-y-3">
-            {serviceLists[id].map((item) => (
+            {service.features.map((item) => (
               <li key={item} className="flex items-start gap-2.5">
                 <Check className={cn('mt-1 flex-none', dark ? 'text-mal-glow' : 'text-mal')} />
                 <span>{item}</span>
               </li>
             ))}
           </ul>
-          {idealFor && (
-            <p className="text-[15px] text-ink-muted">
-              <strong className="text-ink">Idéal pour</strong> {idealFor}
+          {service.idealFor && (
+            <p className={cn('text-[15px]', dark ? 'text-mal-mist' : 'text-ink-muted')}>
+              <strong className={dark ? 'text-white' : 'text-ink'}>{idealForLabel}</strong> {service.idealFor}
             </p>
           )}
           <div className="flex flex-wrap items-center gap-3 pt-1.5">
-            <ButtonLink to={cta.to} variant={dark ? 'light-cu' : 'ink'} arrow>
-              {cta.label}
-            </ButtonLink>
-            {secondary && (
-              <Link className="link" to={secondary.to}>
-                {secondary.label}
+            {service.ctaLabel && (
+              <ButtonLink to={service.href} variant={dark ? 'light-cu' : 'ink'} arrow>
+                {service.ctaLabel}
+              </ButtonLink>
+            )}
+            {service.secondaryLabel && (
+              <Link className="link" href="/contact">
+                {service.secondaryLabel}
               </Link>
             )}
           </div>
         </div>
         <div aria-hidden="true" className="min-w-0 flex-[1_1_460px]">
-          {visual}
+          <ServiceVisual kind={service.visual} icon={service.icon} />
         </div>
       </div>
     </section>
+  )
+}
+
+function ServiceVisual({ kind, icon }: { kind: string; icon: string }): ReactNode {
+  if (kind === 'web') return <WebVisual />
+  if (kind === 'formation') return <TransfoVisual />
+  if (kind === 'ia') return <IaVisual />
+  if (kind === 'reseaux') return <NetworkVisual />
+  // Nouveau service sans illustration dédiée : grande icône sur fond cuivre pâle.
+  return (
+    <div className="grid h-[360px] place-items-center rounded-[28px] border-[1.5px] border-ink bg-copper-soft">
+      <PathIcon name={icon} size={120} strokeWidth={1.2} className="text-copper" />
+    </div>
   )
 }
 
@@ -192,23 +196,26 @@ function NetworkVisual() {
   )
 }
 
-export default function Services() {
-  usePageMeta('Services', 'Développement web et mobile, assistance IT, transformation numérique, IA, réseaux et conseil digital à Lubumbashi.')
+type ServicesProps = {
+  c: BlockData<'services'>
+  shared: BlockData<'shared'>
+  site: SiteInfo
+  services: ServiceItem[]
+}
 
+export default function Services({ c, shared, site, services }: ServicesProps) {
   return (
     <>
       <section aria-labelledby="page-title" className="bg-white pb-20 pt-24">
         <div className="wrap flex flex-col gap-8">
-          <span className="eyebrow rise text-copper">Services</span>
+          <span className="eyebrow rise text-copper">{c.hero.eyebrow}</span>
           <h1 id="page-title" className="rise d1 max-w-[1080px] text-[clamp(42px,6vw,88px)] font-extrabold leading-[0.96] tracking-[-0.04em]">
-            Tout ce qu’il faut pour faire tourner votre entreprise <span className="text-copper">en numérique.</span>
+            <RichTitle text={c.hero.title} />
           </h1>
-          <p className="rise d2 max-w-[640px] text-xl text-ink-soft">
-            Quatre expertises complémentaires : le web et mobile, les réseaux, l’IA et les formations numériques.
-          </p>
+          <p className="rise d2 max-w-[640px] text-xl text-ink-soft">{c.hero.text}</p>
           <nav aria-label="Aller au service" className="rise d3 flex flex-wrap gap-2.5 pt-2">
             {services.map((service) => (
-              <Link key={service.id} to={service.href} className="anchor">
+              <Link key={service.key} href={service.href} className="anchor">
                 {service.short}
               </Link>
             ))}
@@ -216,40 +223,13 @@ export default function Services() {
         </div>
       </section>
 
-      <ServiceRow
-        id="web"
-        eyebrow="Web et mobile"
-        title="Des sites et des applications qui travaillent pour vous."
-        text="Un site rapide qui donne confiance, une boutique qui encaisse par mobile money, une application que vos équipes utilisent vraiment."
-        idealFor="commerces, PME, écoles, cliniques et startups."
-        cta={{ label: 'Voir le détail', to: routes.web }}
-        secondary={{ label: 'Demander un devis', to: routes.contact }}
-        visual={<WebVisual />}
-      />
-      <ServiceRow id="formation" tone="stone" eyebrow="Formations numériques" title="Des compétences numériques utiles au quotidien." text="Nous accompagnons vos équipes avec des formations pratiques en bureautique, outils numériques, création web et intelligence artificielle." idealFor="entreprises, associations, écoles et équipes en développement." cta={{ label: 'Découvrir les formations', to: routes.training }} visual={<TransfoVisual />} />
-      <ServiceRow
-        id="ia"
-        tone="dark"
-        reverse
-        eyebrow="IA et automatisation"
-        title="L’IA qui répond à vos clients pendant que vous dormez."
-        text="Un assistant sur WhatsApp ou sur votre site répond aux questions fréquentes, prend les commandes et vous transmet les cas importants. Le reste de l’automatisation suit la même logique : moins de saisie, plus de temps utile."
-        cta={{ label: 'Voir le détail', to: routes.ia }}
-        visual={<IaVisual />}
-      />
-      <ServiceRow
-        id="reseaux"
-        eyebrow="Réseaux et infrastructures"
-        title="Un réseau stable, même quand le courant ne l’est pas."
-        text="Câblage propre, Wi-Fi qui couvre tout le bâtiment, serveurs protégés par onduleur et sauvegardes automatiques. On documente tout, pour que vous ne dépendiez de personne."
-        idealFor="bureaux, entrepôts, hôtels, campus et sites miniers."
-        cta={{ label: 'Voir le détail', to: routes.reseau }}
-        visual={<NetworkVisual />}
-      />
+      {services.map((service) => (
+        <ServiceRow key={service.key} service={service} idealForLabel={c.idealForLabel} />
+      ))}
 
       <Marquee
         label="Technologies utilisées"
-        items={technologies}
+        items={shared.technologies}
         className="border-y-[1.5px] border-ink py-[34px]"
         render={(tech) => (
           <span className="inline-flex items-center gap-[22px] whitespace-nowrap pr-[22px] font-mono text-lg text-ink-soft">
@@ -262,13 +242,13 @@ export default function Services() {
       <section aria-labelledby="sectors-title" className="py-[120px]">
         <div className="wrap flex flex-col gap-12">
           <div className="flex max-w-[760px] flex-col gap-[18px]">
-            <span className="eyebrow text-copper">Secteurs</span>
+            <span className="eyebrow text-copper">{c.sectors.eyebrow}</span>
             <h2 id="sectors-title" className="text-[clamp(36px,4.6vw,62px)] font-extrabold">
-              On parle le langage de votre métier.
+              <RichTitle text={c.sectors.title} />
             </h2>
           </div>
           <ul className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,270px),1fr))] border-l-[1.5px] border-t-[1.5px] border-ink">
-            {sectors.map((sector) => (
+            {shared.sectors.map((sector) => (
               <li key={sector.title} className="tile flex min-h-[200px] flex-col gap-2.5 border-b-[1.5px] border-r-[1.5px] border-ink p-7">
                 <h3 className="text-[23px] font-bold">{sector.title}</h3>
                 <p className="text-[15px] text-ink-soft">{sector.text}</p>
@@ -278,8 +258,7 @@ export default function Services() {
         </div>
       </section>
 
-      <CtaBand title="Pas sûr du service qu’il vous faut ?" text="Décrivez votre situation. On vous oriente vers la solution la plus simple, même si c’est la moins chère." cta="Nous écrire" />
+      <CtaBand title={c.cta.title} text={c.cta.text} cta={c.cta.button} phone={site.phone} />
     </>
   )
 }
-

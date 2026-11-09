@@ -1,112 +1,156 @@
 # Fibetech
 
-Site de Fibetech, startup informatique de Lubumbashi. Il compte 13 pages : accueil, services, détail web et mobile, formations, tarifs, réalisations, étude de cas, à propos, blog, contact et devis, carrières, FAQ et page 404. Toutes suivent les maquettes validées, sauf la page Formations, ajoutée ensuite dans le même style.
+Site de Fibetech, startup informatique de Lubumbashi, avec son **espace d'administration**. Tout le contenu du site (textes des pages, menu, coordonnées, services, réalisations, articles, formations, tarifs, FAQ, témoignages, équipe) se modifie depuis `/admin`, sans toucher au code. Les formulaires du site (devis, inscription aux formations, lettre d'information) enregistrent les demandes dans la base de données ; elles se consultent dans l'admin.
 
-**Stack :** React 18, TypeScript (strict), Vite 5, Tailwind CSS 3, React Router 6 et GSAP pour l'animation de foule du hero. Le projet ne dépend d'aucun service externe : les polices et les illustrations sont servies par le site lui-même.
+**Stack :** Next.js 15 (App Router) et React 19, TypeScript strict, Tailwind CSS 3, **MySQL** via Prisma 6, GSAP pour l'animation de foule du hero. Le site public, l'API et l'admin tournent dans une seule application Node.js.
 
-## Démarrer
+## Installation
 
-Il faut Node.js 18 ou plus récent.
+Il faut **Node.js 20.12 ou plus récent** et **MySQL 8** (ou MariaDB 10.5+).
 
-```bash
-npm install
-npm run dev          # http://localhost:5173
-```
+1. Créez une base de données vide et un utilisateur MySQL :
 
-| Script                 | Rôle                                                                                                                      |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `npm run dev`        | Serveur de développement avec rechargement à chaud                                                                       |
-| `npm run typecheck`  | Vérification TypeScript sans compiler                                                                                     |
-| `npm run build`      | Build de production dans `dist/` (URL propres : `/tarifs`, `/contact`…)                                             |
-| `npm run build:demo` | Build « démo » avec des URL en `#/tarifs`, qui fonctionne sur n'importe quel hébergement statique sans configuration |
-| `npm run preview`    | Sert le dossier `dist/` pour le tester en local                                                                          |
+   ```sql
+   CREATE DATABASE fibetech CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE USER 'fibetech'@'localhost' IDENTIFIED BY 'un-mot-de-passe-solide';
+   GRANT ALL PRIVILEGES ON fibetech.* TO 'fibetech'@'localhost';
+   ```
+
+2. Copiez `.env.example` en `.env` et remplissez au minimum `DATABASE_URL`, `AUTH_SECRET`, `ADMIN_EMAIL` et `ADMIN_PASSWORD`.
+
+3. Installez, créez les tables et remplissez-les avec les contenus actuels du site :
+
+   ```bash
+   npm install
+   npm run db:deploy    # crée les tables
+   npm run db:seed      # contenus actuels + premier compte admin
+   npm run dev          # http://localhost:3000
+   ```
+
+4. Connectez-vous sur **http://localhost:3000/admin** avec `ADMIN_EMAIL` / `ADMIN_PASSWORD`, puis retirez `ADMIN_PASSWORD` du fichier `.env`.
+
+`npm run db:seed` peut être relancé sans risque : il n'ajoute que ce qui manque et n'écrase jamais vos modifications.
+
+| Script                 | Rôle                                                                     |
+| ---------------------- | ------------------------------------------------------------------------ |
+| `npm run dev`          | Serveur de développement                                                 |
+| `npm run build`        | Build de production                                                      |
+| `npm start`            | Lance le site en production (après `build`)                              |
+| `npm run typecheck`    | Vérification TypeScript                                                  |
+| `npm run db:deploy`    | Applique les migrations (création ou mise à jour des tables)             |
+| `npm run db:migrate`   | Développement : crée une migration après une modification du schéma      |
+| `npm run db:seed`      | Remplit la base avec les contenus par défaut et crée le premier compte   |
+| `npm run db:studio`    | Explorateur visuel de la base (Prisma Studio)                            |
+| `npm run admin:create` | Crée un compte admin, ou **change le mot de passe** d'un compte existant |
+
+Mot de passe oublié : `npm run admin:create -- --email vous@fibetech.cd`, puis saisissez le nouveau mot de passe.
+
+## L'administration
+
+| Menu                         | Ce qu'on y fait                                                                                                                                            |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Tableau de bord**          | Nouvelles demandes, inscriptions et abonnés en un coup d'œil                                                                                               |
+| **Textes des pages**         | Chaque page section par section (titres, paragraphes, boutons, listes), plus les coordonnées, le menu, le pied de page et le bandeau cookies |
+| **Listes**                   | Services, réalisations, articles du blog, formations, formules de prix, FAQ, témoignages, équipe : ajouter, modifier, masquer, supprimer, réordonner      |
+| **Demandes reçues**          | Devis et inscriptions avec statut (nouvelle, en cours, traitée, archivée), notes internes et export Excel/CSV ; liste de la lettre d'information          |
+| **Comptes et mot de passe**  | Ajouter ou retirer des administrateurs, changer son mot de passe                                                                                           |
+
+Les modifications sont visibles sur le site **dès l'enregistrement**. « Rétablir les textes d'origine » remet une page dans son état initial.
+
+### Mise en forme des textes
+
+| Écrire                          | Résultat                                                                  |
+| ------------------------------- | ------------------------------------------------------------------------- |
+| `*mots*` dans un titre          | mots en couleur (cuivre)                                                  |
+| `**mots**`                      | gras                                                                      |
+| `[texte](https://…)` ou `[texte](/contact)` | lien                                                          |
+| `[à compléter]`                 | surligné en cuivre pâle : valeur qui reste à remplir                      |
+| `{phone}`, `{email}`, `{fullAddress}`, `{name}`… | remplacé par les coordonnées saisies dans « Coordonnées »  |
+| ligne vide (articles, pages légales) | nouveau paragraphe ; `- ` en début de ligne pour une liste           |
+
+### Images
+
+Un champ image accepte une image envoyée depuis l'ordinateur (PNG, JPEG, WebP, GIF ou AVIF, 5 Mo maximum), une adresse `https://…`, ou un identifiant Unsplash (`photo-…`). Les images envoyées sont enregistrées dans le dossier `uploads/` (modifiable avec `UPLOAD_DIR`), qui **doit être sauvegardé et conservé** entre deux déploiements.
 
 ## Structure
 
 ```
+prisma/
+  schema.prisma       tables MySQL
+  migrations/         historique des changements de tables
+  seed.ts             remplissage initial
 src/
-  pages/              une page par fichier (chargées à la demande, sauf l'accueil)
+  app/
+    (site)/           pages publiques (une route par page)
+    admin/            pages de l'administration
+    api/              API : formulaires publics (devis, inscriptions, newsletter), auth, admin
+    uploads/          service des images envoyées
+  content/
+    blocks.ts         textes par défaut de chaque page (et modèle des formulaires de l'admin)
+    collections-data.ts  contenus en liste par défaut
+  views/              mise en page de chaque page publique
   components/
-    layout/           Header, Footer, Layout, bandeaux d'appel à l'action
-    ui/               boutons, logo, accordéon, défilant, icônes, CrowdCanvas (skiper39.tsx)
-    illustrations/    maquettes d'écrans en CSS/SVG (boutique, stock, réseau…)
-  data/               contenus éditables : services, tarifs, projets, articles, FAQ
-  lib/site.ts         coordonnées de l'entreprise (téléphone, e-mail, adresse…)
-  lib/routes.ts       toutes les URL du site
-  index.css           styles de base, composants et animations
-  fonts.css           polices auto-hébergées (latin et latin étendu uniquement)
-public/               favicon, robots.txt, règles de redirection
+    layout/           en-tête, pied de page, bandeaux
+    admin/            interface de l'administration
+    ui/               boutons, logo, accordéon, icônes, CrowdCanvas (skiper39.tsx)
+    illustrations/    maquettes d'écrans en CSS/SVG
+  lib/
+    content.ts        lecture des contenus en base
+    admin/            description des listes et des champs, validation
+    auth.ts, session.ts  connexion à l'admin
+  middleware.ts       protection de /admin et de l'API
+  app.css, fonts.css  styles et polices auto-hébergées
 ```
 
-L'arborescence suit la convention shadcn/ui (`components.json`, `src/components/ui`, alias `@/`), ce qui permet d'ajouter des composants shadcn plus tard avec `npx shadcn add …`.
+Ajouter un texte modifiable à une page : ajoutez la clé dans `src/content/blocks.ts` puis utilisez-la dans la vue correspondante (`src/views/…`). Le champ apparaît automatiquement dans l'admin, avec la valeur par défaut tant qu'il n'a pas été modifié.
 
-## Contenus à remplacer avant la mise en ligne
+## Si la base de données est indisponible
 
-Le site ne contient aucune information inventée. Tout ce qui reste à compléter est écrit **entre crochets**, sur fond cuivre pâle (composant `Ph`). Pour tous les retrouver :
+Le site public reste en ligne et affiche les contenus par défaut (`src/content/`) ; l'erreur est écrite dans les journaux du serveur. Les formulaires répondent « service momentanément indisponible » et l'admin n'est pas accessible tant que MySQL ne répond pas.
+
+## Sécurité
+
+- Mots de passe chiffrés (bcrypt), session signée dans un cookie `httpOnly` valable 7 jours.
+- Connexion limitée à 8 essais par adresse et par quart d'heure.
+- Requêtes d'écriture venant d'un autre site refusées ; champs invisibles anti-robots et limitation du nombre d'envois sur les formulaires publics.
+- Toutes les données de l'admin sont validées côté serveur ; les textes saisis ne peuvent pas injecter de code dans les pages.
+- Les images envoyées sont vérifiées d'après leur contenu réel (pas seulement leur nom) ; le SVG est refusé.
+- L'admin est exclu des moteurs de recherche.
+
+`npm audit` signale des failles dans des outils de build (PostCSS embarqué par Next.js, dépendance de la CLI Prisma). Elles ne concernent que la compilation de fichiers du projet et se corrigeront en passant à Next.js 16 et Prisma 7.
+
+## Mise en ligne
+
+Le site a besoin d'un **hébergement Node.js** avec accès à MySQL (VPS, hébergement Node de Hostinger, o2switch, Railway, etc.) :
 
 ```bash
-grep -rn "\[" src/lib src/data src/pages
+npm ci
+npm run db:deploy
+npm run db:seed        # la première fois seulement
+npm run build
+npm start              # port 3000 par défaut ; PORT=8080 npm start pour en changer
 ```
 
-Les principaux contenus à compléter :
+Placez le site derrière HTTPS avec un certificat valide (par exemple via Caddy/Let's Encrypt ou le certificat de votre hébergeur), puis lancez-le avec un gestionnaire de processus (PM2, systemd…). Le proxy doit transmettre `X-Forwarded-Proto`; en production, l’application redirige alors les requêtes HTTP vers HTTPS. Renseignez `SITE_URL` avec l’adresse HTTPS publique pour les balises de partage. Le domaine doit pointer vers l’hébergement avant d’obtenir son certificat. En développement local, `http://localhost` reste en HTTP.
 
-- **`src/lib/site.ts`** : numéro WhatsApp, e-mail, adresse, horaires et liens des réseaux sociaux. Le téléphone `+243 975 079 756` est déjà renseigné.
-- **`src/data/pricing.ts`** : les prix (`[X] $`) et les détails des formules.
-- **`src/data/projects.ts`** : les six projets sont des **exemples**, signalés par la mention « Projet exemple ». Remplacez-les par vos vraies réalisations, avec l'accord de vos clients.
-- **`src/data/trainings.ts`** : le catalogue des formations, les formats, le calendrier des sessions et la FAQ de la page Formations. Les neuf formations sont **proposées en exemple**, comme l'indique la mention « Catalogue donné en exemple ». Remplacez-les par vos formations réelles, avec leurs durées et leurs tarifs. Les dates des sessions et le nombre de places sont aussi à remplir. Une fois le contenu réel en place, retirez les mentions « … donné en exemple » dans `src/pages/Training.tsx`.
-- **Accueil** : le témoignage client, à ajouter seulement quand vous aurez un vrai avis signé.
-- **À propos** : l'histoire de l'équipe, l'origine du nom, les noms et les photos de l'équipe.
-- **Blog** (`src/data/posts.ts`) : les dates, les durées de lecture et le contenu des articles. Il n'existe pas encore de page article ; chaque carte renvoie pour l'instant au blog.
-- **Carrières** : les postes affichés sont donnés en exemple.
-- **`index.html`** : complétez les balises Open Graph avec votre domaine et une image de partage de 1200 × 630.
-
-## Brancher les formulaires
-
-Les formulaires valident les champs et affichent un message de confirmation, mais **n'envoient rien pour l'instant**. Chaque endroit à brancher est indiqué par un commentaire dans le code :
-
-- **Devis** : fonction `onSubmit` dans `src/pages/Contact.tsx`. Envoyez les données vers votre API, ou vers un service comme Formspree, Web3Forms ou Resend. Les données sont `nom`, `organisation`, `telephone`, `email`, `message`, plus les services cochés, le budget et le canal de contact préféré.
-- **Inscription aux formations** : fonction `onSubmit` du composant `Enrollment` dans `src/pages/Training.tsx`. Les données sont la formation choisie, le format, `nom`, `telephone`, `email`, `organisation`, `participants` et `message`. Dans le catalogue et le calendrier, les boutons « S'inscrire » et « Réserver ma place » présélectionnent la formation et le format dans ce formulaire.
-- **Lettre d'information** : `src/components/layout/Footer.tsx` et `src/pages/Blog.tsx`, à relier à votre outil d'e-mailing (Brevo, Mailchimp…).
-
-## Animation du hero (foule)
-
-Le composant `CrowdCanvas` (`src/components/ui/skiper39.tsx`) est adapté de **Skiper39** de Skiper UI. Il dessine sur un `<canvas>` des personnages Open Peeps qui traversent l'écran. Les personnages proviennent de la planche `src/assets/open-peeps-sheet.png` (15 colonnes × 7 lignes).
-
-```tsx
-<CrowdCanvas src={peepsSheet} rows={15} cols={7} />
-```
-
-Par rapport à l'original, le composant a été adapté :
-
-- la taille des personnages s'ajuste à la hauteur du bloc ;
-- les mobiles affichent moins de personnages ;
-- l'animation se met en pause quand le hero sort de l'écran ;
-- une image fixe remplace l'animation si l'utilisateur a demandé à réduire les animations dans son système.
-
-## Déploiement
-
-- **Vercel** : importez le dépôt. `vercel.json` contient déjà la règle qui renvoie toutes les URL vers `index.html`.
-- **Netlify** : le fichier `public/_redirects` fait la même chose. Utilisez la commande de build `npm run build` et le dossier `dist`.
-- **Hébergement mutualisé (Apache, cPanel…)** : ajoutez une règle de réécriture vers `index.html` dans un `.htaccess`, ou utilisez `npm run build:demo`, qui ne nécessite aucune configuration.
+Vercel ou Netlify fonctionnent aussi pour le site et l'admin, mais leurs serveurs ne conservent pas les fichiers : utilisez alors des adresses d'images (`https://…`) plutôt que l'envoi d'images, et une base MySQL hébergée.
 
 Avant la mise en ligne, pensez à :
 
 - choisir le nom de domaine définitif ;
-- compléter les balises Open Graph ;
-- ajouter un `sitemap.xml` ;
-- rédiger les pages Mentions légales et Confidentialité, qui renvoient pour l'instant vers la FAQ.
+- compléter les pages Mentions légales et Confidentialité (admin → Textes des pages) ;
+- ajouter vos réalisations, vos articles et les photos de l'équipe, et remplacer les témoignages d'exemple ;
+- ajouter un `sitemap.xml`.
 
 ## Accessibilité et performance
 
-- Un lien d'évitement mène au contenu, et le focus est visible au clavier.
-- Les accordéons et les filtres utilisent les attributs ARIA (`aria-expanded`, `aria-pressed`, `role="status"`).
-- Les erreurs du formulaire sont annoncées et placent le focus sur le premier champ à corriger.
-- Toutes les animations respectent la préférence `prefers-reduced-motion`.
-- Les pages ont été testées sans débordement horizontal à 390 px (mobile) et à 1440 px (ordinateur), et l’en-tête de 760 à 1440 px.
-- Les pages se chargent à la demande, pour un JavaScript initial d'environ 107 ko gzip.
+- Lien d'évitement vers le contenu, focus visible au clavier, attributs ARIA sur les accordéons, filtres et formulaires.
+- Les erreurs des formulaires sont annoncées et placent le focus sur le premier champ à corriger.
+- Toutes les animations respectent `prefers-reduced-motion`.
+- Les pages sont rendues sur le serveur : seul le JavaScript des parties interactives est envoyé au navigateur.
 
 ## Crédits et licences
 
-- **Animation du hero** : d'après [Skiper39 – Skiper UI](https://skiper-ui.com/v1/skiper39). La version gratuite de Skiper UI demande de créditer l'auteur ; ce crédit figure dans le pied de page et dans l'en-tête de `skiper39.tsx`. Gardez-les.
+- **Animation du hero** : d'après [Skiper39 – Skiper UI](https://skiper-ui.com/v1/skiper39). La version gratuite de Skiper UI demande de créditer l'auteur ; ce crédit figure dans l'en-tête de `skiper39.tsx`. Gardez-le.
 - **Illustrations** : [Open Peeps](https://www.openpeeps.com/) de Pablo Stanley, sous licence CC0 (domaine public).
 - **Polices** : Bricolage Grotesque, Figtree et JetBrains Mono, sous licence SIL Open Font License, via Fontsource.

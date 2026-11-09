@@ -1,0 +1,263 @@
+// Base de données du site Fibetech (MySQL 8 ou MariaDB 10.5+).
+// Après une modification de ce fichier : `npm run db:migrate` (développement)
+// ou `npm run db:deploy` (serveur).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Administration
+// ---------------------------------------------------------------------------
+
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique @db.VarChar(191)
+  name         String    @db.VarChar(120)
+  passwordHash String    @db.VarChar(100)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@map("admin_users")
+}
+
+/// Textes des pages, menus, coordonnées : un document JSON par clé
+/// (« home », « contact », « site »…). La structure est décrite dans
+/// src/content/defaults.ts.
+model ContentBlock {
+  key       String   @id @db.VarChar(64)
+  data      Json
+  updatedAt DateTime @updatedAt
+
+  @@map("content_blocks")
+}
+
+// ---------------------------------------------------------------------------
+// Contenus en liste (modifiables depuis l'admin)
+// ---------------------------------------------------------------------------
+
+model Service {
+  id             Int      @id @default(autoincrement())
+  key            String   @unique @db.VarChar(64)
+  short          String   @db.VarChar(80)
+  title          String   @db.VarChar(191)
+  text           String   @db.Text
+  tags           Json
+  icon           String   @db.VarChar(32)
+  href           String   @db.VarChar(191)
+  features       Json
+  pageEyebrow    String   @db.VarChar(120)
+  pageTitle      String   @db.VarChar(255)
+  pageText       String   @db.Text
+  idealFor       String   @db.VarChar(255)
+  ctaLabel       String   @db.VarChar(80)
+  secondaryLabel String   @db.VarChar(80)
+  tone           String   @db.VarChar(16)
+  visual         String   @db.VarChar(16)
+  published      Boolean  @default(true)
+  position       Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([position])
+  @@map("services")
+}
+
+model Project {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique @db.VarChar(120)
+  title     String   @db.VarChar(191)
+  filter    String   @db.VarChar(16)
+  category  String   @db.VarChar(80)
+  sector    String   @db.VarChar(120)
+  text      String   @db.Text
+  image     String   @db.VarChar(512)
+  kicker    String   @db.VarChar(191)
+  summary   String   @db.Text
+  challenge String   @db.Text
+  approach  String   @db.Text
+  /// [{ title, text }]
+  features  Json
+  /// ["étape 1", "étape 2"…]
+  stages    Json
+  /// [{ image, caption }]
+  gallery   Json
+  published Boolean  @default(true)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@map("projects")
+}
+
+model Post {
+  id          Int       @id @default(autoincrement())
+  slug        String    @unique @db.VarChar(120)
+  title       String    @db.VarChar(255)
+  category    String    @db.VarChar(80)
+  excerpt     String    @db.Text
+  image       String    @db.VarChar(512)
+  body        String    @db.MediumText
+  readTime    String    @db.VarChar(40)
+  publishedAt DateTime?
+  featured    Boolean   @default(false)
+  published   Boolean   @default(true)
+  position    Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([position])
+  @@map("posts")
+}
+
+model Training {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique @db.VarChar(120)
+  domain    String   @db.VarChar(80)
+  title     String   @db.VarChar(191)
+  text      String   @db.Text
+  audience  String   @db.VarChar(255)
+  modules   Json
+  formats   Json
+  icon      String   @db.VarChar(32)
+  tone      String   @db.VarChar(16)
+  duration  String   @db.VarChar(120)
+  price     String   @db.VarChar(120)
+  published Boolean  @default(true)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@map("trainings")
+}
+
+model PricingPlan {
+  id          Int      @id @default(autoincrement())
+  /// « creation » ou « assistance » (onglets de la page Tarifs)
+  group       String   @db.VarChar(32)
+  name        String   @db.VarChar(120)
+  pitch       String   @db.VarChar(255)
+  /// Vide = « Sur devis »
+  price       String?  @db.VarChar(40)
+  unit        String   @db.VarChar(40)
+  recommended Boolean  @default(false)
+  cta         String   @db.VarChar(80)
+  features    Json
+  published   Boolean  @default(true)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([group, position])
+  @@map("pricing_plans")
+}
+
+model FaqItem {
+  id        Int      @id @default(autoincrement())
+  /// Page où la question apparaît : general (page FAQ), web, pricing, training, reseau, ia
+  group     String   @db.VarChar(32)
+  /// Thème affiché sur la page FAQ (groupe « general » uniquement)
+  category  String   @db.VarChar(80)
+  question  String   @db.VarChar(512)
+  answer    String   @db.Text
+  published Boolean  @default(true)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([group, position])
+  @@map("faq_items")
+}
+
+model Testimonial {
+  id        Int      @id @default(autoincrement())
+  quote     String   @db.Text
+  name      String   @db.VarChar(120)
+  role      String   @db.VarChar(191)
+  avatar    String   @db.VarChar(512)
+  rating    Int      @default(5)
+  published Boolean  @default(true)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@map("testimonials")
+}
+
+model TeamMember {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(120)
+  role      String   @db.VarChar(191)
+  image     String   @db.VarChar(512)
+  published Boolean  @default(true)
+  position  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@map("team_members")
+}
+
+// ---------------------------------------------------------------------------
+// Demandes envoyées depuis le site
+// ---------------------------------------------------------------------------
+
+model QuoteRequest {
+  id                Int      @id @default(autoincrement())
+  name              String   @db.VarChar(160)
+  organisation      String   @db.VarChar(191)
+  phone             String   @db.VarChar(40)
+  email             String   @db.VarChar(191)
+  message           String   @db.Text
+  /// Services cochés dans le formulaire
+  services          Json
+  budget            String   @db.VarChar(80)
+  contactPreference String   @db.VarChar(40)
+  /// nouveau, en_cours, traite, archive
+  status            String   @default("nouveau") @db.VarChar(16)
+  notes             String?  @db.Text
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@map("quote_requests")
+}
+
+model TrainingEnrollment {
+  id            Int      @id @default(autoincrement())
+  trainingSlug  String   @db.VarChar(120)
+  trainingTitle String   @db.VarChar(191)
+  format        String   @db.VarChar(40)
+  name          String   @db.VarChar(160)
+  phone         String   @db.VarChar(40)
+  email         String   @db.VarChar(191)
+  organisation  String   @db.VarChar(191)
+  participants  Int      @default(1)
+  message       String   @db.Text
+  status        String   @default("nouveau") @db.VarChar(16)
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status, createdAt])
+  @@map("training_enrollments")
+}
+
+model NewsletterSubscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(191)
+  /// Formulaire d'origine : footer ou blog
+  source    String   @db.VarChar(40)
+  createdAt DateTime @default(now())
+
+  @@map("newsletter_subscribers")
+}

@@ -71,10 +71,15 @@ export const iconPaths = {
 
 export type IconName = keyof typeof iconPaths
 
-export function PathIcon({ name, size = 30, strokeWidth = 1.6, className, ...props }: IconProps & { name: IconName }) {
+export const iconNames = Object.keys(iconPaths) as IconName[]
+
+export const isIconName = (name: string): name is IconName => Object.prototype.hasOwnProperty.call(iconPaths, name)
+
+/** `name` vient parfois de la base : un nom inconnu affiche l'étoile. */
+export function PathIcon({ name, size = 30, strokeWidth = 1.6, className, ...props }: IconProps & { name: IconName | string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className={className} {...props}>
-      <path d={iconPaths[name]} />
+      <path d={iconPaths[isIconName(name) ? name : 'star']} />
     </svg>
   )
 }

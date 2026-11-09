@@ -60,7 +60,9 @@ export function CrowdCanvas({ src, rows = 15, cols = 7, count = 36, className }:
     if (!ctx) return
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const dpr = Math.min(2, window.devicePixelRatio || 1)
+    // The canvas is decorative; limiting its backing resolution makes it much
+    // cheaper to paint on high-density phones without visibly softening it.
+    const dpr = Math.min(1.5, window.devicePixelRatio || 1)
     const stage = { width: 0, height: 0 }
     const allPeeps: Peep[] = []
     const availablePeeps: Peep[] = []
@@ -185,8 +187,8 @@ export function CrowdCanvas({ src, rows = 15, cols = 7, count = 36, className }:
       crowd.forEach((peep) => peep.walk?.kill())
       crowd.length = 0
       availablePeeps.length = 0
-      // Sur petit écran, une partie de la foule suffit : elle reste lisible et légère.
-      const poolSize = width < 640 ? Math.ceil(allPeeps.length * 0.55) : allPeeps.length
+      // Keep the illustration lively without animating every sprite each frame.
+      const poolSize = Math.min(allPeeps.length, width < 640 ? 24 : 42)
       availablePeeps.push(...allPeeps.slice(0, poolSize))
       initCrowd()
       render()

@@ -1,7 +1,17 @@
 node_modules
 dist
 dist-demo
+.next
+/.static-export-build
+/out
+next-env.d.ts
+*.tsbuildinfo
 *.local
 .DS_Store
+
+# Variables d'environnement (mots de passe, clés) : jamais dans Git
 .env*
-!.env.demo
+!.env.example
+
+# Images envoyées depuis l'admin
+/uploads

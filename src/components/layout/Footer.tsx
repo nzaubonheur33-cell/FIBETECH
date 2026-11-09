@@ -1,106 +1,106 @@
-import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
-import { Logo, Wordmark } from '@/components/ui/logo'
-import { routes } from '@/lib/routes'
-import { site } from '@/lib/site'
+'use client'
 
-const columns = [
-  {
-    title: 'Services',
-    links: [
-      { to: routes.web, label: 'Web et mobile' },
-      { to: routes.ia, label: 'IA et automatisation' },
-      { to: routes.reseau, label: 'Réseaux' },
-      { to: routes.training, label: 'Formations' },
-    ],
-  },
-  {
-    title: 'Entreprise',
-    links: [
-      { to: routes.about, label: 'À propos' },
-      { to: routes.work, label: 'Réalisations' },
-      { to: routes.blog, label: 'Blog' },
-    ],
-  },
-  {
-    title: 'Aide',
-    links: [
-      { to: routes.pricing, label: 'Tarifs' },
-      { to: routes.faq, label: 'Questions fréquentes' },
-      { to: routes.contact, label: 'Demander un devis' },
-    ],
-  },
-]
+import Link from 'next/link'
+import { Honeypot } from '@/components/ui/field'
+import { Logo, Wordmark } from '@/components/ui/logo'
+import type { LayoutContent, SiteInfo } from '@/content/blocks'
+import { useNewsletter } from './useNewsletter'
 
 const columnTitle = 'm-0 font-mono text-xs font-medium uppercase tracking-[0.14em] text-copper-light'
 
-export default function Footer() {
-  const [subscribed, setSubscribed] = useState(false)
+function SmartLink({ href, className, children }: { href: string; className: string; children: string }) {
+  if (/^https?:\/\//.test(href))
+    return (
+      <a className={className} href={href} target="_blank" rel="noreferrer">
+        {children}
+      </a>
+    )
+  return (
+    <Link className={className} href={href}>
+      {children}
+    </Link>
+  )
+}
 
-  const onSubscribe = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    // À brancher sur votre outil d'e-mailing (Brevo, Resend, Mailchimp…).
-    setSubscribed(true)
-  }
+export default function Footer({ footer, site }: { footer: LayoutContent['footer']; site: SiteInfo }) {
+  const newsletter = useNewsletter('footer')
 
   return (
     <footer className="overflow-hidden bg-mal-deep text-[16px] text-white">
       <div className="mx-auto flex max-w-[1240px] flex-col gap-16 pl-[max(20px,env(safe-area-inset-left,0px))] pr-[max(20px,env(safe-area-inset-right,0px))] pt-24">
         <div className="flex flex-wrap gap-14">
           <div className="flex min-w-0 flex-[1_1_340px] flex-col gap-[22px]">
-            <Link to={routes.home} aria-label="Fibetech, retour à l’accueil" className="logo inline-flex min-h-[44px] items-center self-start text-white no-underline hover:text-white">
+            <Link href="/" aria-label="Fibetech, retour à l’accueil" className="logo inline-flex min-h-[44px] items-center self-start text-white no-underline hover:text-white">
               <Logo tone="dark" size={34} />
             </Link>
-            <p className="max-w-[380px] text-mal-mist">
-              Startup informatique basée à Lubumbashi. Sites web, applications, IA, réseaux et assistance pour les entreprises du Haut-Katanga.
-            </p>
-            <form aria-label="Inscription aux conseils par e-mail" className="flex max-w-[420px] flex-col gap-2.5" onSubmit={onSubscribe}>
+            <p className="max-w-[380px] text-mal-mist">{footer.description}</p>
+            {process.env.NEXT_PUBLIC_FIBETECH_STATIC === '1' ? (
+              <p className="max-w-[420px] text-sm text-mal-mist">
+                Inscription à la lettre indisponible sur cette version statique. <Link className="underline underline-offset-4" href="/contact">Contactez-nous</Link> pour recevoir nos conseils.
+              </p>
+            ) : (
+            <form aria-label="Inscription aux conseils par e-mail" className="relative flex max-w-[420px] flex-col gap-2.5" onSubmit={newsletter.onSubmit}>
               <label htmlFor="footer-email" className="font-semibold">
-                Nos conseils numériques, par e-mail
+                {footer.newsletterLabel}
               </label>
-              {subscribed ? (
+              {newsletter.state === 'done' ? (
                 <p role="status" className="reveal text-mal-glow">
-                  Merci, vous êtes inscrit.
+                  {footer.newsletterSuccess}
                 </p>
               ) : (
-                <div className="flex flex-wrap gap-2">
-                  <input
-                    id="footer-email"
-                    type="email"
-                    required
-                    placeholder="vous@entreprise.cd"
-                    autoComplete="email"
-                    className="min-h-[50px] min-w-0 flex-[1_1_200px] rounded-full border-[1.5px] border-[#3D5A50] bg-mal-panel px-[18px] text-base text-white placeholder:text-mal-mist"
-                  />
-                  <button type="submit" className="btn btn-light-cu min-h-[50px] px-[22px]">
-                    S’inscrire
-                  </button>
-                </div>
+                <>
+                  <div className="flex flex-wrap gap-2">
+                    <input
+                      id="footer-email"
+                      name="email"
+                      type="email"
+                      required
+                      maxLength={191}
+                      placeholder="vous@entreprise.cd"
+                      autoComplete="email"
+                      className="min-h-[50px] min-w-0 flex-[1_1_200px] rounded-full border-[1.5px] border-[#3D5A50] bg-mal-panel px-[18px] text-base text-white placeholder:text-mal-mist"
+                    />
+                    <button type="submit" className="btn btn-light-cu min-h-[50px] px-[22px]" disabled={newsletter.state === 'sending'}>
+                      {footer.newsletterButton}
+                    </button>
+                  </div>
+                  <Honeypot />
+                  {newsletter.error && (
+                    <p role="alert" className="text-sm font-semibold text-copper-light">
+                      {newsletter.error}
+                    </p>
+                  )}
+                </>
               )}
             </form>
+            )}
           </div>
 
           <div className="grid min-w-0 flex-[2_1_560px] grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-7 gap-y-9">
-            {columns.map((column) => (
+            {footer.columns.map((column) => (
               <div key={column.title} className="flex flex-col gap-3.5">
                 <h2 className={columnTitle}>{column.title}</h2>
                 <ul className="m-0 flex list-none flex-col gap-2 p-0">
                   {column.links.map((link) => (
-                    <li key={link.label}>
-                      <Link className="flink" to={link.to}>
+                    <li key={`${link.href}-${link.label}`}>
+                      <SmartLink className="flink" href={link.href}>
                         {link.label}
-                      </Link>
+                      </SmartLink>
                     </li>
                   ))}
                 </ul>
               </div>
             ))}
             <div className="flex flex-col gap-3.5">
-              <h2 className={columnTitle}>Contact</h2>
+              <h2 className={columnTitle}>{footer.contactTitle}</h2>
               <ul className="m-0 flex list-none flex-col gap-2 p-0 text-mal-fog">
                 <li className="font-mono text-sm">{site.phone}</li>
-                <li><a className="flink" href={`mailto:${site.email}`}>{site.email}</a></li>
                 <li>
+                  <a className="flink" href={`mailto:${site.email}`}>
+                    {site.email}
+                  </a>
+                </li>
+                <li className="text-white">
                   <span className="ph-d">{site.address}</span>, {site.city}
                 </li>
                 <li className="flex flex-wrap gap-3 pt-1.5">
@@ -116,17 +116,15 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-7 text-sm text-mal-mist">
-          <span>© {new Date().getFullYear()} Fibetech. Tous droits réservés.</span>
+          <span>
+            © {new Date().getFullYear()} {footer.copyright}
+          </span>
           <span className="flex flex-wrap gap-[18px]">
-            <Link className="flink" to={routes.legal}>
-              Mentions légales
-            </Link>
-            <Link className="flink" to={routes.privacy}>
-              Confidentialité
-            </Link>
-            <Link className="flink" to={routes.terms}>
-              Conditions générales
-            </Link>
+            {footer.legalLinks.map((link) => (
+              <SmartLink key={link.href} className="flink" href={link.href}>
+                {link.label}
+              </SmartLink>
+            ))}
           </span>
           <span className="font-mono text-xs tracking-[0.06em]">
             {site.city}, {site.region}

@@ -3,7 +3,7 @@ import type { Config } from 'tailwindcss'
 // Couleurs de la marque Fibetech : encre, cuivre (Lubumbashi, capitale du cuivre)
 // et malachite (pierre verte du Katanga).
 export default {
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {

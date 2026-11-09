@@ -1,20 +1,9 @@
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
+import { RichTitle } from '@/components/rich'
 import { ButtonLink } from '@/components/ui/button'
-import { usePageMeta } from '@/hooks/usePageMeta'
-import { routes } from '@/lib/routes'
+import type { BlockData } from '@/content/blocks'
 
-const useful = [
-  { to: routes.services, label: 'Services' },
-  { to: routes.training, label: 'Formations' },
-  { to: routes.pricing, label: 'Tarifs' },
-  { to: routes.work, label: 'Réalisations' },
-  { to: routes.blog, label: 'Blog' },
-  { to: routes.faq, label: 'FAQ' },
-]
-
-export default function NotFound() {
-  usePageMeta('Page introuvable')
-
+export default function NotFound({ c }: { c: BlockData<'not-found'> }) {
   return (
     <section aria-labelledby="page-title" className="pb-24 pt-[72px]">
       <div className="wrap flex flex-col items-center gap-7 text-center">
@@ -32,27 +21,29 @@ export default function NotFound() {
           <span className="wobble inline-block [animation-delay:-2s]">4</span>
         </div>
         <h1 id="page-title" className="rise max-w-[760px] text-[clamp(32px,4.4vw,60px)] font-extrabold">
-          Cette page s’est perdue dans la foule.
+          <RichTitle text={c.title} />
         </h1>
-        <p className="rise d1 max-w-[520px] text-[19px] text-ink-soft">Le lien est peut-être ancien, ou l’adresse contient une faute de frappe. Voici de quoi retrouver votre chemin.</p>
+        <p className="rise d1 max-w-[520px] text-[19px] text-ink-soft">{c.text}</p>
         <div className="rise d2 flex flex-wrap justify-center gap-3">
-          <ButtonLink to={routes.home}>Retour à l’accueil</ButtonLink>
-          <ButtonLink to={routes.contact} variant="ghost">
-            Signaler le lien cassé
+          <ButtonLink to="/">{c.homeButton}</ButtonLink>
+          <ButtonLink to="/contact" variant="ghost">
+            {c.reportButton}
           </ButtonLink>
         </div>
-        <nav aria-label="Pages utiles" className="flex flex-col items-center gap-3.5 pt-6">
-          <span className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">Pages utiles</span>
-          <ul className="flex flex-wrap justify-center gap-2.5">
-            {useful.map((page) => (
-              <li key={page.to}>
-                <Link className="pill" to={page.to}>
-                  {page.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        {c.links.length > 0 && (
+          <nav aria-label="Pages utiles" className="flex flex-col items-center gap-3.5 pt-6">
+            <span className="font-mono text-xs uppercase tracking-[0.14em] text-ink-muted">{c.usefulTitle}</span>
+            <ul className="flex flex-wrap justify-center gap-2.5">
+              {c.links.map((page) => (
+                <li key={page.href}>
+                  <Link className="pill" href={page.href}>
+                    {page.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )}
       </div>
     </section>
   )
