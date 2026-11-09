@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import peepsSheet from '@/assets/open-peeps-sheet.png'
 import { CtaBand } from '@/components/layout/CtaBand'
-import { ProjectCard } from '@/components/ProjectCard'
 import { RichInline, RichTitle } from '@/components/rich'
 import { ButtonLink } from '@/components/ui/button'
 import { HorizonDot, PathIcon } from '@/components/ui/icons'
@@ -10,7 +9,7 @@ import { Marquee } from '@/components/ui/marquee'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { CrowdCanvas } from '@/components/ui/skiper39'
 import type { BlockData, SiteInfo } from '@/content/blocks'
-import type { ProjectItem, ServiceItem, TestimonialItem } from '@/content/types'
+import type { ServiceItem, TestimonialItem } from '@/content/types'
 import { imageUrl } from '@/lib/images'
 
 type HomeProps = {
@@ -18,11 +17,10 @@ type HomeProps = {
   shared: BlockData<'shared'>
   site: SiteInfo
   services: ServiceItem[]
-  projects: ProjectItem[]
   testimonials: TestimonialItem[]
 }
 
-export default function Home({ c, shared, site, services, projects, testimonials }: HomeProps) {
+export default function Home({ c, shared, site, services, testimonials }: HomeProps) {
   return (
     <>
       <Hero c={c.hero} site={site} />
@@ -120,24 +118,6 @@ export default function Home({ c, shared, site, services, projects, testimonials
           </div>
         </div>
       </section>
-
-      {projects.length > 0 && (
-        <section aria-labelledby="work-title" className="bg-white py-[120px]">
-          <div className="wrap flex flex-col gap-14">
-            <div className="flex flex-wrap items-end justify-between gap-6">
-              <SectionHeading id="work-title" eyebrow={c.work.eyebrow} title={<RichTitle text={c.work.title} />} />
-              <Link className="link" href="/realisations">
-                {c.work.link}
-              </Link>
-            </div>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-6">
-              {projects.slice(0, 3).map((project) => (
-                <ProjectCard key={project.slug} project={project} />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
       {testimonials.length > 0 && (
         <section aria-labelledby="quote-title" className="border-y-[1.5px] border-ink bg-stone py-[120px]">
