@@ -120,14 +120,14 @@ export default function Home({ c, shared, site, services, testimonials }: HomePr
       </section>
 
       {testimonials.length > 0 && (
-        <section aria-labelledby="quote-title" className="border-y-[1.5px] border-ink bg-stone py-[120px]">
+        <section aria-labelledby="quote-title" className="border-y-[1.5px] border-ink bg-stone py-16 md:py-[120px]">
           <div className="wrap flex flex-col items-center gap-[34px] text-center">
             <h2 id="quote-title" className="eyebrow text-copper">
               {c.testimonials.title}
             </h2>
             {c.testimonials.note && <p className="max-w-2xl text-sm text-ink-muted">{c.testimonials.note}</p>}
             <div className="testimonial-window w-full" aria-label="Témoignages de clients" role="region">
-              <div className="testimonial-track">
+              <div className="testimonial-track" tabIndex={0} aria-label="Liste de témoignages à faire défiler">
                 {[...testimonials, ...testimonials].map((item, index) => {
                   const avatar = imageUrl(item.avatar, { w: 160, h: 160, q: 80 })
                   const stars = Math.min(5, Math.max(0, item.rating))
