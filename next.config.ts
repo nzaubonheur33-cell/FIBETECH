@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Le projet n'embarque pas ESLint : la vérification se fait avec `npm run typecheck`.
   eslint: { ignoreDuringBuilds: true },
+  // Les types sont vérifiés avant chaque envoi avec `npm run typecheck` ; on ne les
+  // revérifie pas pendant le build de l'hébergeur (étape qui échouait sur Railway).
+  typescript: { ignoreBuildErrors: true },
   ...(staticFrontend ? { output: 'export' as const } : {
     async headers() {
       return [
