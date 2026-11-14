@@ -3,10 +3,22 @@ import type { ReactNode } from 'react'
 import '../fonts.css'
 import '../app.css'
 
-const siteUrl = process.env.SITE_URL
+// Adresse publique du site. Accepte aussi une valeur sans « https:// »
+// (ex. « fibetech.up.railway.app ») ; une valeur invalide est ignorée au lieu de casser le build.
+function publicSiteUrl(value: string | undefined) {
+  const raw = value?.trim()
+  if (!raw) return null
+  try {
+    return new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`)
+  } catch {
+    return null
+  }
+}
+
+const siteUrl = publicSiteUrl(process.env.SITE_URL)
 
 export const metadata: Metadata = {
-  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
+  ...(siteUrl ? { metadataBase: siteUrl } : {}),
   title: {
     default: 'Fibetech · Startup informatique à Lubumbashi',
     template: 'Fibetech · %s',
