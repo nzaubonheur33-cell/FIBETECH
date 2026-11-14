@@ -5,9 +5,14 @@ import ProjectDetail from '@/views/ProjectDetail'
 
 type Props = { params: Promise<{ slug: string }> }
 
-export const dynamicParams = false
+// Avec le serveur, les pages sont rendues à la demande : un élément ajouté depuis l'admin
+// est disponible tout de suite. scripts/build-static.mjs retire `dynamic` et passe `dynamicParams` à false
+// pour l'export statique, qui ne connaît que les éléments présents au moment du build.
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
 
 export async function generateStaticParams() {
+  if (process.env.FIBETECH_STATIC_FRONTEND !== '1') return []
   return (await getProjects()).map(({ slug }) => ({ slug }))
 }
 

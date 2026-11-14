@@ -133,7 +133,16 @@ npm start              # port 3000 par défaut ; PORT=8080 npm start pour en cha
 
 Placez le site derrière HTTPS avec un certificat valide (par exemple via Caddy/Let's Encrypt ou le certificat de votre hébergeur), puis lancez-le avec un gestionnaire de processus (PM2, systemd…). Le proxy doit transmettre `X-Forwarded-Proto`; en production, l’application redirige alors les requêtes HTTP vers HTTPS. Renseignez `SITE_URL` avec l’adresse HTTPS publique pour les balises de partage. Le domaine doit pointer vers l’hébergement avant d’obtenir son certificat. En développement local, `http://localhost` reste en HTTP.
 
-Vercel ou Netlify fonctionnent aussi pour le site et l'admin, mais leurs serveurs ne conservent pas les fichiers : utilisez alors des adresses d'images (`https://…`) plutôt que l'envoi d'images, et une base MySQL hébergée.
+### Sur Vercel
+
+Le projet est prêt pour Vercel (`vercel.json` lance `npm run vercel-build`, qui applique les migrations puis construit le site). Il faut :
+
+1. une **base MySQL hébergée**, accessible depuis Internet ;
+2. un **Blob store** Vercel relié au projet (onglet *Storage*) : il ajoute `BLOB_READ_WRITE_TOKEN`, et les images envoyées depuis l'admin y sont stockées, car les serveurs de Vercel ne conservent pas les fichiers ;
+3. dans *Settings → Environment Variables* : `DATABASE_URL`, `AUTH_SECRET`, `SITE_URL`, et pour les alertes de la lettre d'information `RESEND_API_KEY` et `RESEND_FROM_EMAIL` ;
+4. une première fois, depuis votre ordinateur avec `DATABASE_URL` pointant vers la base en ligne : `npm run db:seed` (contenus de départ et compte administrateur).
+
+La version statique (`npm run build:static`) reste disponible, sans admin ni formulaires.
 
 Avant la mise en ligne, pensez à :
 

@@ -1,4 +1,4 @@
-import { cpSync, existsSync, mkdirSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, symlinkSync, writeFileSync } from 'node:fs'
 import { spawnSync } from 'node:child_process'
 import { join, resolve, sep } from 'node:path'
 
@@ -47,6 +47,16 @@ const appRoot = join(workRoot, 'src', 'app')
 for (const routeDirectory of ['api', 'admin', 'uploads']) {
   const excludedRoute = join(appRoot, routeDirectory)
   if (existsSync(excludedRoute)) rmSync(excludedRoute, { recursive: true, force: true })
+}
+
+// L'export statique ne peut pas rendre de page à la demande : seules les pages connues
+// au moment du build sont générées.
+for (const page of [['(site)', 'realisations', '[slug]', 'page.tsx'], ['(site)', 'blog', '[slug]', 'page.tsx']]) {
+  const file = join(appRoot, ...page)
+  const source = readFileSync(file, 'utf8')
+  const serverConfig = "export const dynamic = 'force-dynamic'\nexport const dynamicParams = true"
+  if (!source.includes(serverConfig)) throw new Error(`Configuration serveur introuvable dans ${file}`)
+  writeFileSync(file, source.replace(serverConfig, 'export const dynamicParams = false'))
 }
 
 const dependencies = join(root, 'node_modules')

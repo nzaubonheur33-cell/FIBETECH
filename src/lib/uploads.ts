@@ -1,8 +1,14 @@
-// Images envoyées depuis l'admin : enregistrées sur le disque du serveur (UPLOAD_DIR)
-// et servies par la route /uploads/… Le dossier doit être conservé entre deux déploiements.
+// Images envoyées depuis l'admin :
+// - sur Vercel (BLOB_READ_WRITE_TOKEN défini) : stockées dans Vercel Blob, adresse https:// ;
+// - ailleurs : enregistrées sur le disque du serveur (UPLOAD_DIR) et servies par la route
+//   /uploads/… Le dossier doit alors être conservé entre deux déploiements.
 import path from 'node:path'
 
 export const MAX_UPLOAD_BYTES = 5 * 1024 * 1024
+
+export function blobStorageEnabled() {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN)
+}
 
 export function uploadRoot() {
   return path.resolve(process.env.UPLOAD_DIR || path.join(process.cwd(), 'uploads'))

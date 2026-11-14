@@ -1,8 +1,9 @@
 import { randomBytes } from 'node:crypto'
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
+import { put } from '@vercel/blob'
 import { HttpError, ok, requireAdmin, route } from '@/lib/api'
-import { imageTypes, MAX_UPLOAD_BYTES, sniffImage, uploadRoot } from '@/lib/uploads'
+import { imageTypes, MAX_UPLOAD_BYTES, sniffImage, uploadRoot, blobStorageEnabled } from '@/lib/uploads'
 
 /** Reçoit une image (champ « file ») et renvoie son adresse publique. */
 export const POST = route(async (request: Request) => {
@@ -21,6 +22,19 @@ export const POST = route(async (request: Request) => {
   const now = new Date()
   const folder = path.join(String(now.getFullYear()), String(now.getMonth() + 1).padStart(2, '0'))
   const name = `${randomBytes(12).toString('hex')}.${imageTypes[kind].ext}`
+
+  // Sur Vercel, le disque n'est pas conservé : l'image part dans Vercel Blob,
+  // qui renvoie une adresse https:// publique.
+  if (blobStorageEnabled()) {
+    const blob = await put(`uploads/${folder.split(path.sep).join('/')}/${name}`, Buffer.from(bytes), {
+      access: 'public',
+      contentType: imageTypes[kind].mime,
+      addRandomSuffix: false,
+      cacheControlMaxAge: 31536000,
+    })
+    return ok({ url: blob.url }, 201)
+  }
+
   const dir = path.join(uploadRoot(), folder)
   await mkdir(dir, { recursive: true })
   await writeFile(path.join(dir, name), bytes)

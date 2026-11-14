@@ -1,6 +1,4 @@
 {
-  "framework": null,
-  "buildCommand": "npm run build:static",
-  "outputDirectory": "out",
-  "cleanUrls": true
+  "framework": "nextjs",
+  "buildCommand": "npm run vercel-build"
 }
