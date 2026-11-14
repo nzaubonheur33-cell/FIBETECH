@@ -133,6 +133,15 @@ npm start              # port 3000 par défaut ; PORT=8080 npm start pour en cha
 
 Placez le site derrière HTTPS avec un certificat valide (par exemple via Caddy/Let's Encrypt ou le certificat de votre hébergeur), puis lancez-le avec un gestionnaire de processus (PM2, systemd…). Le proxy doit transmettre `X-Forwarded-Proto`; en production, l’application redirige alors les requêtes HTTP vers HTTPS. Renseignez `SITE_URL` avec l’adresse HTTPS publique pour les balises de partage. Le domaine doit pointer vers l’hébergement avant d’obtenir son certificat. En développement local, `http://localhost` reste en HTTP.
 
+### Sur Railway
+
+`railway.json` contient la configuration : build `npm run build`, migrations (`npm run db:deploy`) avant chaque mise en ligne, puis `npm start` (Railway fournit `PORT` et le HTTPS). Dans le projet Railway :
+
+1. ajoutez un service **MySQL** et le service du site (dépôt GitHub) ;
+2. variables du site : `DATABASE_URL=${{MySQL.MYSQL_URL}}`, `AUTH_SECRET`, `SITE_URL`, `UPLOAD_DIR=/data/uploads`, et si besoin `RESEND_API_KEY` / `RESEND_FROM_EMAIL` ;
+3. ajoutez un **volume** monté sur `/data` au service du site, pour conserver les images envoyées depuis l'admin ;
+4. une première fois : `npm run db:seed` avec `DATABASE_URL` pointant vers la base Railway (adresse publique `MYSQL_PUBLIC_URL`).
+
 ### Sur Vercel
 
 Le projet est prêt pour Vercel (`vercel.json` lance `npm run vercel-build`, qui applique les migrations puis construit le site). Il faut :

@@ -220,9 +220,9 @@ export const faqData: FaqEntry[] = [
 ]
 
 export const teamData: TeamMemberItem[] = [
-  { name: 'Emmanuel Kayombo', role: 'CEO · Direction générale', image: '/images/team/emmanuel.jpg', published: true },
-  { name: 'Bonheur Nzau', role: 'Directeur technique (CTO)', image: '/images/team/bonheur.jpg', published: true },
-  { name: 'Kaleb', role: 'Directeur général (DG)', image: '/images/team/kaleb.jpg', published: true },
+  { name: 'Emmanuel Kayombo', role: 'CEO · Direction générale', image: '', published: true },
+  { name: 'Bonheur Nzau', role: 'Directeur général (DG)', image: '/images/team/bonheur.jpg', published: true },
+  { name: 'Kaleb', role: 'Directeur technique (CTO)', image: '', published: true },
   { name: 'Jonathan Nathan', role: 'Directeur marketing', image: '/images/team/jonathan.jpg', published: true },
   { name: 'Makal Bijika Exaucée', role: 'Rédactrice en chef', image: '/images/team/exaucee.jpg', published: true },
   { name: 'Salima Binti Baruani Allegra', role: 'Responsable communication et réseaux sociaux', image: '/images/team/allegra.jpg', published: true },

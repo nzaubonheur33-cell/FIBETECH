@@ -35,6 +35,10 @@ export async function middleware(request: NextRequest) {
   if (process.env.NODE_ENV === 'production' && forwardedProto === 'http' && !isLocalHost) {
     const httpsUrl = request.nextUrl.clone()
     httpsUrl.protocol = 'https:'
+    // Derrière un proxy (Railway…), nextUrl porte l'adresse interne du serveur :
+    // on redirige vers le domaine public demandé par le navigateur.
+    httpsUrl.hostname = hostname
+    httpsUrl.port = ''
     return NextResponse.redirect(httpsUrl, 308)
   }
 
