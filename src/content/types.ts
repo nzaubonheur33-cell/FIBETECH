@@ -95,15 +95,6 @@ export type FaqEntry = {
   published: boolean
 }
 
-export type TestimonialItem = {
-  quote: string
-  name: string
-  role: string
-  avatar: string
-  rating: number
-  published: boolean
-}
-
 export type TeamMemberItem = {
   name: string
   role: string

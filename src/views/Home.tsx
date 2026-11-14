@@ -9,18 +9,16 @@ import { Marquee } from '@/components/ui/marquee'
 import { SectionHeading } from '@/components/ui/section-heading'
 import { CrowdCanvas } from '@/components/ui/skiper39'
 import type { BlockData, SiteInfo } from '@/content/blocks'
-import type { ServiceItem, TestimonialItem } from '@/content/types'
-import { imageUrl } from '@/lib/images'
+import type { ServiceItem } from '@/content/types'
 
 type HomeProps = {
   c: BlockData<'home'>
   shared: BlockData<'shared'>
   site: SiteInfo
   services: ServiceItem[]
-  testimonials: TestimonialItem[]
 }
 
-export default function Home({ c, shared, site, services, testimonials }: HomeProps) {
+export default function Home({ c, shared, site, services }: HomeProps) {
   return (
     <>
       <Hero c={c.hero} site={site} />
@@ -118,51 +116,6 @@ export default function Home({ c, shared, site, services, testimonials }: HomePr
           </div>
         </div>
       </section>
-
-      {testimonials.length > 0 && (
-        <section aria-labelledby="quote-title" className="border-y-[1.5px] border-ink bg-stone py-16 md:py-[120px]">
-          <div className="wrap flex flex-col items-center gap-[34px] text-center">
-            <h2 id="quote-title" className="eyebrow text-copper">
-              {c.testimonials.title}
-            </h2>
-            {c.testimonials.note && <p className="max-w-2xl text-sm text-ink-muted">{c.testimonials.note}</p>}
-            <div className="testimonial-window w-full" aria-label="Témoignages de clients" role="region">
-              <div className="testimonial-track" tabIndex={0} aria-label="Liste de témoignages à faire défiler">
-                {[...testimonials, ...testimonials].map((item, index) => {
-                  const avatar = imageUrl(item.avatar, { w: 160, h: 160, q: 80 })
-                  const stars = Math.min(5, Math.max(0, item.rating))
-                  return (
-                    <article key={`${item.name}-${index}`} aria-hidden={index >= testimonials.length} className="testimonial-card">
-                      <div className="flex items-center gap-3.5">
-                        {avatar ? (
-                          <img src={avatar} alt="" className="h-[66px] w-[66px] shrink-0 rounded-full border-[3px] border-coral object-cover" />
-                        ) : (
-                          <span className="grid h-[66px] w-[66px] shrink-0 place-items-center rounded-full border-[3px] border-coral bg-copper-soft font-display text-2xl font-bold text-copper-deep">
-                            {item.name.charAt(0)}
-                          </span>
-                        )}
-                        <div className="min-w-0 flex-1 text-left">
-                          <strong className="block text-lg">{item.name}</strong>
-                          <span className="text-sm text-ink-muted">{item.role}</span>
-                        </div>
-                        {stars > 0 && (
-                          <span className="shrink-0 text-[18px] tracking-[2px] text-[#F26464]" aria-label={`${stars} étoile${stars > 1 ? 's' : ''}`}>
-                            {'★'.repeat(stars)}
-                          </span>
-                        )}
-                      </div>
-                      <blockquote className="mt-5 text-left text-[15px] leading-[1.8] text-ink-soft">{item.quote}</blockquote>
-                      <span aria-hidden="true" className="absolute -bottom-5 left-7 font-display text-[76px] font-bold leading-none text-[#F26464]">
-                        “
-                      </span>
-                    </article>
-                  )
-                })}
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
       <section aria-labelledby="price-title" className="bg-white py-[120px]">
         <div className="wrap flex flex-col gap-14">

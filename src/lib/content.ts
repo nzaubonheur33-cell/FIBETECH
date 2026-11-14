@@ -3,13 +3,13 @@
 // Si la base est injoignable, le site reste affiché avec les contenus par défaut
 // (src/content) et l'erreur est écrite dans les journaux du serveur.
 
-import type { FaqItem, Post, PricingPlan, Project, Service, TeamMember, Testimonial, Training } from '@prisma/client'
+import type { FaqItem, Post, PricingPlan, Project, Service, TeamMember, Training } from '@prisma/client'
 import { unstable_cache } from 'next/cache'
 import { connection } from 'next/server'
 import { cache } from 'react'
 import { blockDefaults, type BlockData, type BlockKey } from '@/content/blocks'
-import { faqData, postsData, pricingPlansData, projectsData, servicesData, teamData, testimonialsData, trainingsData } from '@/content/collections-data'
-import type { FaqEntry, PostItem, PricingPlanItem, ProjectItem, ServiceItem, TeamMemberItem, TestimonialItem, TrainingItem } from '@/content/types'
+import { faqData, postsData, pricingPlansData, projectsData, servicesData, teamData, trainingsData } from '@/content/collections-data'
+import type { FaqEntry, PostItem, PricingPlanItem, ProjectItem, ServiceItem, TeamMemberItem, TrainingItem } from '@/content/types'
 import { prisma } from './db'
 import { conform, objectList, stringList } from './shape'
 
@@ -152,15 +152,6 @@ export const toFaq = (row: FaqItem): FaqEntry & { id: string } => ({
   published: row.published,
 })
 
-export const toTestimonial = (row: Testimonial): TestimonialItem => ({
-  quote: row.quote,
-  name: row.name,
-  role: row.role,
-  avatar: row.avatar,
-  rating: row.rating,
-  published: row.published,
-})
-
 export const toTeamMember = (row: TeamMember): TeamMemberItem => ({ name: row.name, role: row.role, image: row.image, published: row.published })
 
 // ---------------------------------------------------------------------------
@@ -225,12 +216,6 @@ const getAllFaq = cache(async () => {
 export async function getFaq(group: string) {
   return (await getAllFaq()).filter((item) => item.group === group)
 }
-
-export const getTestimonials = cache(async () => {
-  if (staticFrontend) return testimonialsData.filter((item) => item.published)
-  await connection()
-  return cachedContent('testimonials', () => safe('témoignages', async () => (await prisma.testimonial.findMany({ where: { published: true }, orderBy: order })).map(toTestimonial), () => testimonialsData))
-})
 
 export const getTeam = cache(async () => {
   if (staticFrontend) return teamData.filter((item) => item.published)

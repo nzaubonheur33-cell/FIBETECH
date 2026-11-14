@@ -3,7 +3,7 @@
 // Les images peuvent être une image envoyée depuis l'admin (« /uploads/… »), une URL complète
 // ou un identifiant Unsplash (« photo-… »). Sans image, l'équipe affiche les initiales.
 
-import type { FaqEntry, PostItem, PricingPlanItem, ProjectItem, ServiceItem, TeamMemberItem, TestimonialItem, TrainingItem } from './types'
+import type { FaqEntry, PostItem, PricingPlanItem, ProjectItem, ServiceItem, TeamMemberItem, TrainingItem } from './types'
 
 export const servicesData: ServiceItem[] = [
   {
@@ -217,12 +217,6 @@ export const faqData: FaqEntry[] = [
   q('ia', '', 'Faut-il déjà utiliser l’intelligence artificielle ?', 'Non. Nous commençons par votre besoin et vos outils actuels, puis déterminons si l’IA apporte une réelle valeur.'),
   q('ia', '', 'Une automatisation peut-elle fonctionner avec nos outils actuels ?', 'Souvent oui, si les outils offrent des intégrations adaptées. Nous vérifions cela pendant le diagnostic.'),
   q('ia', '', 'Les réponses automatiques sont-elles vérifiées ?', 'Le périmètre prévoit des règles de contrôle et une possibilité de transfert à un membre de votre équipe pour les demandes sensibles ou incertaines.'),
-]
-
-export const testimonialsData: TestimonialItem[] = [
-  { quote: 'La gestion des inscriptions, des élèves et du suivi scolaire est désormais réunie sur une seule plateforme.', name: 'Luna Ngoie Nyota', role: 'Gestion scolaire · Lubumbashi', avatar: 'photo-1711500310968-94016f941fd3', rating: 5, published: true },
-  { quote: 'Nous pouvons centraliser les informations de nos locataires et suivre les demandes plus facilement.', name: 'Benita Kapend Mufuk', role: 'Gestion locative · RDC et Rwanda', avatar: 'photo-1685539527395-4417cebc39aa', rating: 5, published: true },
-  { quote: 'La boutique en ligne facilite la présentation de nos produits et la prise de commandes partout en RDC.', name: 'Elei Ntambwe Anyasi', role: 'E-commerce · RDC', avatar: 'photo-1717184477790-20f7a77f4dfa', rating: 5, published: true },
 ]
 
 export const teamData: TeamMemberItem[] = [

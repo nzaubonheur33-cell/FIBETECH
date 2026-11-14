@@ -139,10 +139,6 @@ export const home = {
     title: 'Des outils qui servent tous les jours.',
     link: 'Voir tous les projets',
   },
-  testimonials: {
-    title: 'Ils en parlent',
-    note: 'Retours illustratifs ; les portraits sont des photos d’étudiants utilisées à titre d’exemple, sans lien avec les noms affichés.',
-  },
   pricing: {
     eyebrow: 'Tarifs',
     title: 'Des prix clairs, pensés pour les PME.',
@@ -540,7 +536,13 @@ export const about = {
     story: '« Fibe » vient du mot *fibre*, qui évoque la rapidité et la fluidité. Associé à « tech », il exprime notre volonté de proposer des services numériques réactifs, fiables et accessibles.',
     note: 'Un nom qui reflète notre ambition : relier les idées à des solutions concrètes grâce à la technologie.',
   },
-  team: { eyebrow: 'L’équipe', title: 'Les visages derrière vos projets.' },
+  team: {
+    eyebrow: 'L’équipe',
+    title: 'Les visages derrière vos projets.',
+    photo: '/images/team/equipe.jpg',
+    photoAlt: 'L’équipe Fibetech réunie devant ses locaux à Lubumbashi',
+    photoCaption: 'Toute l’équipe Fibetech, à Lubumbashi.',
+  },
   where: {
     eyebrow: 'Où nous trouver',
     title: 'On est juste à côté.',

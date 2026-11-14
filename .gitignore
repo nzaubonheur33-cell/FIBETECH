@@ -15,3 +15,6 @@ next-env.d.ts
 
 # Images envoyées depuis l'admin
 /uploads
+
+# Sauvegardes locales de la base
+backups/

@@ -23,7 +23,6 @@ export function delegate(model: ModelName): Delegate {
     training: prisma.training,
     pricingPlan: prisma.pricingPlan,
     faqItem: prisma.faqItem,
-    testimonial: prisma.testimonial,
     teamMember: prisma.teamMember,
   }
   return map[model] as unknown as Delegate

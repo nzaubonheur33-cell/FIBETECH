@@ -4,9 +4,10 @@ import { Wordmark } from '@/components/ui/logo'
 import TeamCarousel from '@/components/layout/TeamCarousel'
 import type { BlockData, SiteInfo } from '@/content/blocks'
 import type { TeamMemberItem } from '@/content/types'
+import { imageUrl } from '@/lib/images'
 
 export default function About({ c, site, team }: { c: BlockData<'about'>; site: SiteInfo; team: TeamMemberItem[] }) {
-
+  const teamPhoto = imageUrl(c.team.photo, { w: 900 })
   return (
     <>
       <section aria-labelledby="page-title" className="overflow-hidden border-b-[1.5px] border-ink pt-[88px]">
@@ -110,14 +111,22 @@ export default function About({ c, site, team }: { c: BlockData<'about'>; site: 
       </section>
 
       <section aria-labelledby="team-title" className="py-[120px]">
-        <div className="wrap flex flex-col gap-10">
-          <div className="flex flex-wrap items-end justify-between gap-6">
-            <div className="flex max-w-[720px] flex-col gap-[18px]">
+        <div className="wrap flex flex-col gap-14">
+          <div className="flex flex-wrap items-center gap-x-16 gap-y-10">
+            <div className="flex min-w-0 max-w-[720px] flex-[1_1_420px] flex-col gap-[18px]">
               <span className="eyebrow text-copper">{c.team.eyebrow}</span>
               <h2 id="team-title" className="text-[clamp(36px,4.4vw,58px)] font-extrabold">
                 <RichTitle text={c.team.title} />
               </h2>
             </div>
+            {teamPhoto && (
+              <figure className="m-0 mx-auto flex w-full max-w-[400px] flex-col gap-4">
+                <div className="rotate-1 overflow-hidden rounded-[22px] border-[1.5px] border-ink bg-stone shadow-[10px_10px_0_#121614]">
+                  <img src={teamPhoto} alt={c.team.photoAlt} loading="lazy" className="aspect-[9/16] w-full object-cover" />
+                </div>
+                {c.team.photoCaption && <figcaption className="text-center font-mono text-sm text-ink-muted">{c.team.photoCaption}</figcaption>}
+              </figure>
+            )}
           </div>
           <TeamCarousel team={team} />
         </div>

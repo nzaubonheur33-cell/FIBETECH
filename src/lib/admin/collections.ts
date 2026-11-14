@@ -2,7 +2,7 @@
 // (prisma/schema.prisma) : les noms de champs sont ceux des colonnes.
 import { iconOptions, type FieldDef, type Option } from './fields'
 
-export type ModelName = 'service' | 'project' | 'post' | 'training' | 'pricingPlan' | 'faqItem' | 'testimonial' | 'teamMember'
+export type ModelName = 'service' | 'project' | 'post' | 'training' | 'pricingPlan' | 'faqItem' | 'teamMember'
 
 export type CollectionDef = {
   /** Segment d'URL dans l'admin : /admin/listes/{name} */
@@ -252,25 +252,6 @@ export const collections: CollectionDef[] = [
       { name: 'answer', label: 'Réponse', type: 'textarea', required: true, rows: 5, wide: true },
       { name: 'group', label: 'Page', type: 'select', options: faqGroups },
       { name: 'category', label: 'Thème (page FAQ)', type: 'text', max: 80, placeholder: 'Général', help: 'Uniquement pour la page FAQ : sert de filtre.' },
-      published,
-    ],
-  },
-  {
-    name: 'temoignages',
-    model: 'testimonial',
-    label: 'Témoignages',
-    singular: 'témoignage',
-    description: 'Les avis clients qui défilent sur la page d’accueil.',
-    titleField: 'name',
-    subtitleField: 'role',
-    imageField: 'avatar',
-    publicPath: () => '/',
-    fields: [
-      { name: 'quote', label: 'Témoignage', type: 'textarea', required: true, rows: 4, wide: true },
-      { name: 'name', label: 'Nom', type: 'text', required: true, max: 120 },
-      { name: 'role', label: 'Fonction et contexte', type: 'text', max: 191 },
-      { name: 'avatar', label: 'Photo', type: 'image', help: imageHelp, wide: true },
-      { name: 'rating', label: 'Note (0 à 5 étoiles)', type: 'number', min: 0, maxValue: 5 },
       published,
     ],
   },

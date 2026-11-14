@@ -7,7 +7,7 @@
 import { PrismaClient, type Prisma } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 import { blockDefaults } from '../src/content/blocks'
-import { faqData, postsData, pricingPlansData, projectsData, servicesData, teamData, testimonialsData, trainingsData } from '../src/content/collections-data'
+import { faqData, postsData, pricingPlansData, projectsData, servicesData, teamData, trainingsData } from '../src/content/collections-data'
 
 try {
   process.loadEnvFile('.env')
@@ -53,7 +53,6 @@ async function main() {
   await seedTable('Formations', () => prisma.training.count(), () => prisma.training.createMany({ data: withPosition(trainingsData) }))
   await seedTable('Formules de prix', () => prisma.pricingPlan.count(), () => prisma.pricingPlan.createMany({ data: withPosition(pricingPlansData) }))
   await seedTable('FAQ', () => prisma.faqItem.count(), () => prisma.faqItem.createMany({ data: withPosition(faqData) }))
-  await seedTable('Témoignages', () => prisma.testimonial.count(), () => prisma.testimonial.createMany({ data: withPosition(testimonialsData) }))
   await seedTable('Équipe', () => prisma.teamMember.count(), () => prisma.teamMember.createMany({ data: withPosition(teamData) }))
 
   console.log('Compte administrateur')

@@ -1,6 +1,6 @@
 # Fibetech
 
-Site de Fibetech, startup informatique de Lubumbashi, avec son **espace d'administration**. Tout le contenu du site (textes des pages, menu, coordonnées, services, réalisations, articles, formations, tarifs, FAQ, témoignages, équipe) se modifie depuis `/admin`, sans toucher au code. Les formulaires du site (devis, inscription aux formations, lettre d'information) enregistrent les demandes dans la base de données ; elles se consultent dans l'admin.
+Site de Fibetech, startup informatique de Lubumbashi, avec son **espace d'administration**. Tout le contenu du site (textes des pages, menu, coordonnées, services, réalisations, articles, formations, tarifs, FAQ, équipe) se modifie depuis `/admin`, sans toucher au code. Les formulaires du site (devis, inscription aux formations, lettre d'information) enregistrent les demandes dans la base de données ; elles se consultent dans l'admin.
 
 **Stack :** Next.js 15 (App Router) et React 19, TypeScript strict, Tailwind CSS 3, **MySQL** via Prisma 6, GSAP pour l'animation de foule du hero. Le site public, l'API et l'admin tournent dans une seule application Node.js.
 
@@ -51,7 +51,7 @@ Mot de passe oublié : `npm run admin:create -- --email vous@fibetech.cd`, puis 
 | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Tableau de bord**          | Nouvelles demandes, inscriptions et abonnés en un coup d'œil                                                                                               |
 | **Textes des pages**         | Chaque page section par section (titres, paragraphes, boutons, listes), plus les coordonnées, le menu, le pied de page et le bandeau cookies |
-| **Listes**                   | Services, réalisations, articles du blog, formations, formules de prix, FAQ, témoignages, équipe : ajouter, modifier, masquer, supprimer, réordonner      |
+| **Listes**                   | Services, réalisations, articles du blog, formations, formules de prix, FAQ, équipe : ajouter, modifier, masquer, supprimer, réordonner      |
 | **Demandes reçues**          | Devis et inscriptions avec statut (nouvelle, en cours, traitée, archivée), notes internes et export Excel/CSV ; liste de la lettre d'information          |
 | **Comptes et mot de passe**  | Ajouter ou retirer des administrateurs, changer son mot de passe                                                                                           |
 
@@ -139,7 +139,7 @@ Avant la mise en ligne, pensez à :
 
 - choisir le nom de domaine définitif ;
 - compléter les pages Mentions légales et Confidentialité (admin → Textes des pages) ;
-- ajouter vos réalisations, vos articles et les photos de l'équipe, et remplacer les témoignages d'exemple ;
+- ajouter vos réalisations, vos articles et les photos de l'équipe ;
 - ajouter un `sitemap.xml`.
 
 ## Accessibilité et performance
