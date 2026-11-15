@@ -269,6 +269,8 @@ export const collections: CollectionDef[] = [
       { name: 'name', label: 'Nom', type: 'text', required: true, max: 120 },
       { name: 'role', label: 'Rôle', type: 'text', required: true, max: 191 },
       { name: 'image', label: 'Photo', type: 'image', help: imageHelp, wide: true },
+      { name: 'bio', label: 'Présentation', type: 'textarea', rows: 5, wide: true, help: 'Affichée quand on clique sur la carte. Laissez une ligne vide entre deux paragraphes.' },
+      { name: 'email', label: 'E-mail (facultatif)', type: 'text', max: 191, placeholder: 'prenom@fibetech.com', help: 'Affiché dans la fenêtre de détails.' },
       published,
     ],
   },

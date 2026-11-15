@@ -99,5 +99,9 @@ export type TeamMemberItem = {
   name: string
   role: string
   image: string
+  /** Présentation affichée dans la fenêtre de détails (paragraphes séparés par une ligne vide). */
+  bio: string
+  /** Adresse e-mail affichée dans la fenêtre de détails (facultative). */
+  email: string
   published: boolean
 }

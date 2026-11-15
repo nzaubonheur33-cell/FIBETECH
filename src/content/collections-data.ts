@@ -220,10 +220,9 @@ export const faqData: FaqEntry[] = [
 ]
 
 export const teamData: TeamMemberItem[] = [
-  { name: 'Emmanuel Kayombo', role: 'CEO · Direction générale', image: '/images/team/emmanuel.jpg', published: true },
-  { name: 'Bonheur Nzau', role: 'Directeur général (DG)', image: '/images/team/bonheur.jpg', published: true },
-  { name: 'Kaleb', role: 'Directeur technique (CTO)', image: '', published: true },
-  { name: 'Jonathan Nathan', role: 'Directeur marketing', image: '/images/team/jonathan.jpg', published: true },
-  { name: 'Makal Bijika Exaucée', role: 'Responsable de la prospection commerciale et du suivi client', image: '/images/team/exaucee.jpg', published: true },
-  { name: 'Salima Binti Baruani Allegra', role: 'Responsable de la communication digitale', image: '/images/team/allegra.jpg', published: true },
+  { name: 'Emmanuel Kayombo', role: 'Fondateur · CEO', image: '/images/team/emmanuel.jpg', bio: '', email: '', published: true },
+  { name: 'Bonheur Nzau', role: 'Co-fondateur · Directeur général et directeur technique', image: '/images/team/bonheur.jpg', bio: '', email: '', published: true },
+  { name: 'Jonathan Nathan', role: 'Directeur marketing', image: '/images/team/jonathan.jpg', bio: '', email: '', published: true },
+  { name: 'Makal Bijika Exaucée', role: 'Responsable de la prospection commerciale et du suivi client', image: '/images/team/exaucee.jpg', bio: '', email: '', published: true },
+  { name: 'Salima Binti Baruani Allegra', role: 'Responsable de la communication digitale', image: '/images/team/allegra.jpg', bio: '', email: '', published: true },
 ]

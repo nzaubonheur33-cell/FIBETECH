@@ -182,6 +182,8 @@ model TeamMember {
   name      String   @db.VarChar(120)
   role      String   @db.VarChar(191)
   image     String   @db.VarChar(512)
+  bio       String   @db.Text
+  email     String   @default("") @db.VarChar(191)
   published Boolean  @default(true)
   position  Int      @default(0)
   createdAt DateTime @default(now())

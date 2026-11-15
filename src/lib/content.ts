@@ -152,7 +152,7 @@ export const toFaq = (row: FaqItem): FaqEntry & { id: string } => ({
   published: row.published,
 })
 
-export const toTeamMember = (row: TeamMember): TeamMemberItem => ({ name: row.name, role: row.role, image: row.image, published: row.published })
+export const toTeamMember = (row: TeamMember): TeamMemberItem => ({ name: row.name, role: row.role, image: row.image, bio: row.bio, email: row.email, published: row.published })
 
 // ---------------------------------------------------------------------------
 // Listes publiées
