@@ -160,7 +160,8 @@ export const labels: Record<string, string> = {
   // Coordonnées
   phone: 'Téléphone',
   whatsapp: 'WhatsApp',
-  email: 'E-mail',
+  email: 'E-mail de contact',
+  companyEmail: 'E-mail de l’entreprise (pages légales)',
   address: 'Adresse (rue)',
   city: 'Ville',
   region: 'Région et pays',

@@ -10,6 +10,7 @@ export function siteTokens(site: SiteInfo): Tokens {
     phone: site.phone,
     whatsapp: site.whatsapp,
     email: site.email,
+    companyEmail: site.companyEmail || site.email,
     address: site.address,
     fullAddress: site.fullAddress,
     city: site.city,

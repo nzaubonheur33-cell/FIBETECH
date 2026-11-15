@@ -10,7 +10,7 @@
 // - **mots** : en gras dans les paragraphes ;
 // - [texte](https://lien) : lien ;
 // - [texte] seul : valeur à compléter (surlignée en cuivre pâle) ;
-// - {phone}, {email}, {whatsapp}, {address}, {fullAddress}, {city}, {name}, {hours} :
+// - {phone}, {email}, {companyEmail}, {whatsapp}, {address}, {fullAddress}, {city}, {name}, {hours} :
 //   remplacés par les coordonnées de la page « Coordonnées ».
 
 const link = (label: string, href: string) => ({ label, href })
@@ -19,7 +19,9 @@ export const site = {
   name: 'Fibetech',
   phone: '+243 997 978 888',
   whatsapp: '+243 997 978 888',
-  email: 'fibetech1@gmail.com',
+  email: 'contact@fibetech.com',
+  // Adresse officielle de l’entreprise, utilisée dans les pages légales ({companyEmail}).
+  companyEmail: 'fibetech@fibetech.com',
   address: 'Église, avenue Kalombo n° 25',
   city: 'Lubumbashi',
   region: 'Haut-Katanga, RDC',
@@ -28,11 +30,10 @@ export const site = {
   hours: 'Lun–Ven, 8 h–17 h',
   coords: '',
   socials: [
-    link('Instagram', 'https://www.instagram.com/'),
-    link('LinkedIn', 'https://www.linkedin.com/'),
-    link('Facebook', 'https://www.facebook.com/'),
-    link('YouTube', 'https://www.youtube.com/'),
-    link('WhatsApp', 'https://wa.me/243997978888'),
+    link('Instagram', 'https://www.instagram.com/fibe_tech'),
+    link('TikTok', 'https://www.tiktok.com/@fibe.tech'),
+    link('WhatsApp', 'https://whatsapp.com/channel/0029VbEKSa16xCSMyieSnh1c'),
+    link('Facebook', 'https://www.facebook.com/fibetech'),
   ],
 }
 
@@ -666,14 +667,14 @@ export const legal = {
   sections: [
     {
       title: 'Éditeur du site',
-      body: '**Nom commercial :** {name}\n\n**Dénomination légale et forme juridique :** [à compléter]\n\n**Adresse :** {fullAddress}\n\n**E-mail :** [{email}](mailto:{email})\n\n**Téléphone :** {phone}\n\n**RCCM, ID. Nat. et NIF :** [à compléter]\n\n**Directeur ou responsable de publication :** [à compléter]',
+      body: '**Nom commercial :** {name}\n\n**Dénomination légale et forme juridique :** [à compléter]\n\n**Adresse :** {fullAddress}\n\n**E-mail :** [{companyEmail}](mailto:{companyEmail})\n\n**Téléphone :** {phone}\n\n**RCCM, ID. Nat. et NIF :** [à compléter]\n\n**Directeur ou responsable de publication :** [à compléter]',
     },
     { title: 'Hébergement', body: 'Hébergeur du site : [à compléter avec le nom légal, l’adresse et les coordonnées de l’hébergeur effectivement utilisé].' },
     {
       title: 'Propriété intellectuelle',
       body: 'Sauf mention contraire, les textes, éléments graphiques, marques et contenus publiés sur ce site sont protégés par les règles applicables de propriété intellectuelle. Toute réutilisation substantielle nécessite l’autorisation préalable de leur titulaire. Les images provenant de banques d’images restent soumises aux licences de leurs auteurs.',
     },
-    { title: 'Contact', body: 'Pour toute question relative au site ou à son contenu, écrivez à [{email}](mailto:{email}).' },
+    { title: 'Contact', body: 'Pour toute question relative au site ou à son contenu, écrivez à [{companyEmail}](mailto:{companyEmail}).' },
   ],
   ...legalCommon,
 }
@@ -690,7 +691,7 @@ export const privacy: typeof legal = {
   sections: [
     {
       title: 'Responsable du traitement',
-      body: 'Responsable : {name}, {fullAddress}. Contact : [{email}](mailto:{email}). Identité juridique complète et coordonnées du responsable : [à compléter].',
+      body: 'Responsable : {name}, {fullAddress}. Contact : [{companyEmail}](mailto:{companyEmail}). Identité juridique complète et coordonnées du responsable : [à compléter].',
     },
     {
       title: 'Données demandées',
@@ -706,7 +707,7 @@ export const privacy: typeof legal = {
     },
     {
       title: 'Vos demandes',
-      body: 'Pour toute question ou demande concernant vos données, notamment pour les consulter ou les faire supprimer, contactez {name} à [{email}](mailto:{email}). Les demandes sont traitées sous réserve des règles applicables en République démocratique du Congo.',
+      body: 'Pour toute question ou demande concernant vos données, notamment pour les consulter ou les faire supprimer, contactez {name} à [{companyEmail}](mailto:{companyEmail}). Les demandes sont traitées sous réserve des règles applicables en République démocratique du Congo.',
     },
     {
       title: 'Référence légale',
@@ -754,7 +755,7 @@ export const terms: typeof legal = {
       title: 'Annulation et règlement des différends',
       body: 'Les conditions d’annulation, les conséquences financières d’un arrêt de projet et les modalités de règlement des différends doivent être précisées dans le devis ou le contrat signé. Les parties s’efforcent d’abord de rechercher une solution amiable. Le droit applicable et la juridiction compétente sont à confirmer dans les documents contractuels selon la situation juridique de Fibetech.',
     },
-    { title: 'Contact', body: 'Pour toute demande liée à une prestation, contactez Fibetech à [{email}](mailto:{email}) ou au {phone}.' },
+    { title: 'Contact', body: 'Pour toute demande liée à une prestation, contactez Fibetech à [{companyEmail}](mailto:{companyEmail}) ou au {phone}.' },
   ],
   ...legalCommon,
 }
