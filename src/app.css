@@ -1058,3 +1058,15 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Fenêtre de présentation de l'équipe : hauteur limitée à l'écran (dvh quand le navigateur le connaît). */
+.team-dialog,
+.team-dialog-scroll {
+  max-height: calc(100vh - 32px);
+}
+@supports (height: 100dvh) {
+  .team-dialog,
+  .team-dialog-scroll {
+    max-height: calc(100dvh - 32px);
+  }
+}
