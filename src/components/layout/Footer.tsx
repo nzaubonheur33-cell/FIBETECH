@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Honeypot } from '@/components/ui/field'
 import { Logo, Wordmark } from '@/components/ui/logo'
 import type { LayoutContent, SiteInfo } from '@/content/blocks'
+import { OPEN_COOKIE_SETTINGS_EVENT } from '@/lib/analytics'
 import { useNewsletter } from './useNewsletter'
 
 const columnTitle = 'm-0 font-mono text-xs font-medium uppercase tracking-[0.14em] text-copper-light'
@@ -22,7 +23,7 @@ function SmartLink({ href, className, children }: { href: string; className: str
   )
 }
 
-export default function Footer({ footer, site }: { footer: LayoutContent['footer']; site: SiteInfo }) {
+export default function Footer({ footer, site, cookieSettingsLabel }: { footer: LayoutContent['footer']; site: SiteInfo; cookieSettingsLabel?: string }) {
   const newsletter = useNewsletter('footer')
 
   return (
@@ -125,6 +126,11 @@ export default function Footer({ footer, site }: { footer: LayoutContent['footer
                 {link.label}
               </SmartLink>
             ))}
+            {cookieSettingsLabel && (
+              <button type="button" className="flink cursor-pointer border-0 bg-transparent p-0 text-inherit" onClick={() => window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS_EVENT))}>
+                {cookieSettingsLabel}
+              </button>
+            )}
           </span>
           <span className="font-mono text-xs tracking-[0.06em]">
             {site.city}, {site.region}

@@ -27,6 +27,8 @@ export const site = {
   mapQuery: 'Église, avenue Kalombo n° 25, Lubumbashi, Haut-Katanga, République démocratique du Congo',
   hours: 'Lun–Ven, 8 h–17 h',
   coords: '',
+  // Identifiant de mesure Google Analytics 4 (« G-XXXXXXX »). Vide = aucune mesure d’audience.
+  analyticsId: '',
   socials: [
     link('Instagram', 'https://www.instagram.com/'),
     link('LinkedIn', 'https://www.linkedin.com/'),
@@ -73,6 +75,11 @@ export const layout = {
     text: 'Ce site n’utilise pas de cookies publicitaires ou de mesure d’audience. Seul votre choix de fermeture de ce message est mémorisé sur cet appareil.',
     link: 'Lire la politique de confidentialité',
     button: 'J’ai compris',
+    // Utilisés seulement quand un identifiant Google Analytics est renseigné (Coordonnées).
+    analyticsText: 'Avec votre accord, nous utilisons Google Analytics pour savoir combien de personnes visitent le site et quelles pages les intéressent. Aucune publicité. Vous pouvez changer d’avis à tout moment avec le lien « Cookies » en bas de page.',
+    accept: 'Accepter',
+    refuse: 'Refuser',
+    manage: 'Cookies',
   },
 }
 
@@ -702,7 +709,7 @@ export const privacy: typeof legal = {
     },
     {
       title: 'Cookies et mesure d’audience',
-      body: 'Le site n’intègre actuellement aucun outil de mesure d’audience ou de publicité. Seul l’espace d’administration, réservé à l’équipe, utilise un cookie de session. L’hébergeur et les services tiers chargés pour afficher certaines cartes, polices ou images peuvent toutefois recevoir des informations techniques selon leurs propres politiques.',
+      body: 'Le site n’utilise aucun cookie publicitaire.\n\nMesure d’audience : uniquement si vous cliquez sur « Accepter » dans le bandeau cookies, le site utilise Google Analytics (Google Ireland Ltd / Google LLC) pour compter les visites et savoir quelles pages sont consultées : pages vues, durée, type d’appareil, pays ou ville approximatifs. Google Analytics dépose alors des cookies (_ga, _ga_…) conservés au maximum 13 mois, et les données peuvent être traitées hors de la RDC selon la politique de confidentialité de Google. Sans votre accord, aucun de ces outils n’est chargé. Vous pouvez changer d’avis à tout moment avec le lien « Cookies » en bas de chaque page ; un refus supprime les cookies Google Analytics du site.\n\nLe choix fait dans le bandeau est mémorisé dans le stockage local de votre navigateur. Seul l’espace d’administration, réservé à l’équipe, utilise un cookie de session. L’hébergeur et les services tiers chargés pour afficher certaines cartes, polices ou images peuvent recevoir des informations techniques selon leurs propres politiques.',
     },
     {
       title: 'Vos demandes',
