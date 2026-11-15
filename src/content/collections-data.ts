@@ -224,6 +224,6 @@ export const teamData: TeamMemberItem[] = [
   { name: 'Bonheur Nzau', role: 'Directeur général (DG)', image: '/images/team/bonheur.jpg', published: true },
   { name: 'Kaleb', role: 'Directeur technique (CTO)', image: '', published: true },
   { name: 'Jonathan Nathan', role: 'Directeur marketing', image: '/images/team/jonathan.jpg', published: true },
-  { name: 'Makal Bijika Exaucée', role: 'Rédactrice en chef', image: '/images/team/exaucee.jpg', published: true },
-  { name: 'Salima Binti Baruani Allegra', role: 'Responsable communication et réseaux sociaux', image: '/images/team/allegra.jpg', published: true },
+  { name: 'Makal Bijika Exaucée', role: 'Responsable de la prospection commerciale et du suivi client', image: '/images/team/exaucee.jpg', published: true },
+  { name: 'Salima Binti Baruani Allegra', role: 'Responsable de la communication digitale', image: '/images/team/allegra.jpg', published: true },
 ]
