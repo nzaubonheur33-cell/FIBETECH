@@ -220,7 +220,7 @@ export const faqData: FaqEntry[] = [
 ]
 
 export const teamData: TeamMemberItem[] = [
-  { name: 'Emmanuel Kayombo', role: 'CEO · Direction générale', image: '', published: true },
+  { name: 'Emmanuel Kayombo', role: 'CEO · Direction générale', image: '/images/team/emmanuel.jpg', published: true },
   { name: 'Bonheur Nzau', role: 'Directeur général (DG)', image: '/images/team/bonheur.jpg', published: true },
   { name: 'Kaleb', role: 'Directeur technique (CTO)', image: '', published: true },
   { name: 'Jonathan Nathan', role: 'Directeur marketing', image: '/images/team/jonathan.jpg', published: true },
