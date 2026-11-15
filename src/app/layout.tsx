@@ -3,19 +3,10 @@ import type { ReactNode } from 'react'
 import '../fonts.css'
 import '../app.css'
 
-// Adresse publique du site. Accepte aussi une valeur sans « https:// »
-// (ex. « fibetech.up.railway.app ») ; une valeur invalide est ignorée au lieu de casser le build.
-function publicSiteUrl(value: string | undefined) {
-  const raw = value?.trim()
-  if (!raw) return null
-  try {
-    return new URL(/^https?:\/\//i.test(raw) ? raw : `https://${raw}`)
-  } catch {
-    return null
-  }
-}
+import { publicSiteUrl } from '@/lib/site-url'
 
-const siteUrl = publicSiteUrl(process.env.SITE_URL)
+// Une valeur de SITE_URL invalide est ignorée au lieu de casser le build.
+const siteUrl = publicSiteUrl()
 
 export const metadata: Metadata = {
   ...(siteUrl ? { metadataBase: siteUrl } : {}),
